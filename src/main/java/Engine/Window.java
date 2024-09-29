@@ -35,10 +35,11 @@ public class Window
         {
             case 0:
                 currentScene = new LevelEditor();
-                // currentScene.Init();
+                currentScene.Init();
                 break;
             case 1:
                 currentScene = new LevelScene();
+                currentScene.Init();
                 break;
             default:
                 assert false: "Unknown scene '" + newScene + "'";
@@ -133,6 +134,7 @@ public class Window
             if (dt >= 0.0)
                 currentScene.Update(dt);
 
+            // Testing Scene change
             if (KeyListener.IsKeyPressed(KeyEvent.VK_1))
                 Window.ChangeScene(0);
             if (KeyListener.IsKeyPressed(KeyEvent.VK_2))

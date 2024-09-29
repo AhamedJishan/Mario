@@ -7,5 +7,10 @@ public abstract class Scene
 
     }
 
+    public void Init()
+    {
+
+    }
+
     public abstract void Update(float dt);
 }
