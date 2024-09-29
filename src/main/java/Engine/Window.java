@@ -3,6 +3,9 @@ package Engine;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
+import util.Time;
+
+import java.awt.event.KeyEvent;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -17,11 +20,30 @@ public class Window
 
     private static Window window = null;
 
+    private static Scene currentScene = null;
+
     private Window()
     {
         this.width = 1920;
         this.height = 1080;
         this.title = "Mario";
+    }
+
+    public static void ChangeScene(int newScene)
+    {
+        switch (newScene)
+        {
+            case 0:
+                currentScene = new LevelEditor();
+                // currentScene.Init();
+                break;
+            case 1:
+                currentScene = new LevelScene();
+                break;
+            default:
+                assert false: "Unknown scene '" + newScene + "'";
+                break;
+        }
     }
 
     public static Window Get()
@@ -89,10 +111,16 @@ public class Window
         // creates the GLCapabilities instance and makes the OpenGL
         // bindings available for use.
         GL.createCapabilities();
+
+        Window.ChangeScene(0);
     }
 
     private void Loop()
     {
+        float beginTime = Time.GetTime();
+        float endTime;
+        float dt = -1.0f;
+
         while(!glfwWindowShouldClose(glfwWindow))
         {
             // Poll events
@@ -101,13 +129,21 @@ public class Window
             glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            // Testing key listeners
-            if (KeyListener.IsKeyPressed(GLFW_KEY_SPACE))
-            {
-                System.out.println("Space key pressed!");
-            }
+            // Updating the scene
+            if (dt >= 0.0)
+                currentScene.Update(dt);
+
+            if (KeyListener.IsKeyPressed(KeyEvent.VK_1))
+                Window.ChangeScene(0);
+            if (KeyListener.IsKeyPressed(KeyEvent.VK_2))
+                Window.ChangeScene(1);
 
             glfwSwapBuffers(glfwWindow);
+
+            // deltaTime calculation
+            endTime = Time.GetTime();
+            dt = endTime - beginTime;
+            beginTime = endTime;
         }
     }
 }
