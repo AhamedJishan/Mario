@@ -1,6 +1,7 @@
 package Engine;
 
 import Renderer.Shader;
+import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 
 import java.nio.Buffer;
@@ -13,40 +14,14 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class LevelEditor extends Scene
 {
-    private String vertexShaderSrc = "" +
-            "#version 330 core\n" +
-            "\n" +
-            "layout (location = 0) in vec3 aPos;\n" +
-            "layout (location = 1) in vec4 aColor;\n" +
-            "\n" +
-            "out vec4 fColor;\n" +
-            "\n" +
-            "void main()\n" +
-            "{\n" +
-            "    fColor = aColor;\n" +
-            "    gl_Position = vec4(aPos, 1.0);\n" +
-            "}";
-
-    private String fragmentShaderSrc = "" +
-            "#version 330 core\n" +
-            "\n" +
-            "in vec4 fColor;\n" +
-            "\n" +
-            "out vec4 color;\n" +
-            "\n" +
-            "void main()\n" +
-            "{\n" +
-            "    color = fColor;\n" +
-            "}";
-
     private int vertexID, fragmentID, shaderProgram;
 
     private float[] vertexArray = {
             // POSITION             // COLOR
-             0.5f, -0.5f,  0.0f,    1.0f, 0.0f, 0.0f, 1.0f,     // Bottom right
-            -0.5f,  0.5f,  0.0f,    0.0f, 1.0f, 0.0f, 1.0f,     // Top left
-             0.5f,  0.5f,  0.0f,    0.0f, 0.0f, 1.0f, 1.0f,     // Top right
-            -0.5f, -0.5f,  0.0f,    0.0f, 1.0f, 1.0f, 1.0f      // Bottom left
+             200.0f,   10.0f,  0.0f,    1.0f, 0.0f, 0.0f, 1.0f,     // Bottom right
+              10.0f,  200.0f,  0.0f,    0.0f, 1.0f, 0.0f, 1.0f,     // Top left
+             200.0f,  200.0f,  0.0f,    0.0f, 0.0f, 1.0f, 1.0f,     // Top right
+              10.0f,   10.0f,  0.0f,    0.0f, 1.0f, 1.0f, 1.0f      // Bottom left
     };
 
     private int[] elementArray = {
@@ -65,6 +40,8 @@ public class LevelEditor extends Scene
     @Override
     public void Init()
     {
+        camera = new Camera(new Vector2f());
+
         defaultShader = new Shader("assets/shaders/default.glsl");
         defaultShader.Compile();
 
@@ -110,6 +87,9 @@ public class LevelEditor extends Scene
     public void Update(float dt)
     {
         defaultShader.Use();
+        defaultShader.UploadMat4f("uProjection", camera.GetProjectionMatrix());
+        defaultShader.UploadMat4f("uView", camera.GetViewMatrix());
+
         // Bind the VAO we'll be using
         glBindVertexArray(vaoID);
 
