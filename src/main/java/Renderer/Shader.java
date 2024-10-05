@@ -190,4 +190,11 @@ public class Shader
         int varLocation = glGetUniformLocation(shaderProgramID, varName);
         glUniform1i(varLocation, val);
     }
+
+    public void UploadTexture(String varName, int slot)
+    {
+        Use();
+        int varLocation = glGetUniformLocation(shaderProgramID, varName);
+        glUniform1i(varLocation, slot);
+    }
 }
