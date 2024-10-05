@@ -1,5 +1,7 @@
 package Engine;
 
+import Components.FontRenderer;
+import Components.SpriteRenderer;
 import Renderer.Shader;
 import Renderer.Texture;
 import org.joml.Vector2f;
@@ -35,6 +37,8 @@ public class LevelEditor extends Scene
     private Shader defaultShader;
     private Texture testTexture;
 
+    private GameObject testObj;
+
     public LevelEditor()
     {
     }
@@ -42,6 +46,12 @@ public class LevelEditor extends Scene
     @Override
     public void Init()
     {
+        System.out.println("Creating 'TestObject'");
+        testObj = new GameObject("Test Object");
+        testObj.AddComponent(new SpriteRenderer());
+        testObj.AddComponent(new FontRenderer());
+        this.AddGameObjectToScene(this.testObj);
+
         camera = new Camera(new Vector2f());
 
         defaultShader = new Shader("assets/shaders/default.glsl");
@@ -109,5 +119,8 @@ public class LevelEditor extends Scene
 
         glBindVertexArray(0);
         defaultShader.Detach();
+
+
+        for (GameObject gameObject: this.gameObjects) gameObject.Update(dt);
     }
 }
