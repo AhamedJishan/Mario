@@ -58,6 +58,11 @@ public class Window
         return Window.window;
     }
 
+    public static Scene GetScene()
+    {
+        return Get().currentScene;
+    }
+
     public void Run()
     {
         System.out.println("Hellow LWJGL " + Version.getVersion() + "!");
@@ -133,7 +138,7 @@ public class Window
             glClear(GL_COLOR_BUFFER_BIT);
 
             // Updating the scene
-            if (dt >= 0.0)
+            if (dt >= 0)
                 currentScene.Update(dt);
 
             // Testing Scene change

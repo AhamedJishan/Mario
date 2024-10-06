@@ -6,6 +6,6 @@ public class Time
 
     public static float GetTime()
     {
-        return (float)( (System.nanoTime() - timeStarted) * 1E-9 );
+        return (float)((System.nanoTime() - timeStarted) * 1E-9);
     }
 }
