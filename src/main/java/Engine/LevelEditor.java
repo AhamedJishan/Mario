@@ -3,13 +3,10 @@ package Engine;
 import Components.SpriteRenderer;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
+import util.AssetPool;
 
 public class LevelEditor extends Scene
 {
-    // For fps calculations
-    private float timeElapsed;
-    private int frames;
-
     public LevelEditor()
     {
     }
@@ -40,21 +37,18 @@ public class LevelEditor extends Scene
             }
         }
         // ============================================================================
+
+        LoadResources();
+    }
+
+    private void LoadResources()
+    {
+        AssetPool.GetShader("assets/shaders/default.glsl");
     }
 
     @Override
     public void Update(float dt)
     {
-        // For FPS
-        timeElapsed += dt;
-        frames++;
-        if (timeElapsed >= 1)
-        {
-            System.out.println("FPS: " + (frames));
-            frames = 0;
-            timeElapsed = 0.0f;
-        }
-
         for (GameObject gameObject: this.gameObjects) gameObject.Update(dt);
 
         this.renderer.Render();
