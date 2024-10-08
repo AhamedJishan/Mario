@@ -16,27 +16,13 @@ public class LevelEditor extends Scene
     {
         this.camera = new Camera(new Vector2f());
 
-        // TEST CODE for batch rendering ==============================================
-        int xOffset = 10;
-        int yOffset = 10;
-        float totalWidth = (float) (600 - 2 * xOffset);
-        float totalHeight = (float) (300 - 2 * yOffset);
-        float sizeX = totalWidth / 100.0f;
-        float sizeY = totalHeight / 100.0f;
+        GameObject mario = new GameObject("Mario", new Transform(new Vector2f(100, 100), new Vector2f(256, 256)));
+        mario.AddComponent(new SpriteRenderer(AssetPool.GetTexture("assets/textures/mario.png")));;
+        this.AddGameObjectToScene(mario);
 
-        for (int x = 0; x < 100; x++)
-        {
-            for (int y = 0; y < 100; y++)
-            {
-                float xPos = xOffset + x * sizeX;
-                float yPos = yOffset + y * sizeY;
-
-                GameObject gameObject = new GameObject("Obj" + x + "" + y, new Transform(new Vector2f(xPos, yPos), new Vector2f(sizeX, sizeY)));
-                gameObject.AddComponent(new SpriteRenderer(new Vector4f(xPos/totalWidth, yPos/totalHeight, 1, 1)));
-                this.AddGameObjectToScene(gameObject);
-            }
-        }
-        // ============================================================================
+        GameObject goomba = new GameObject("Goomba", new Transform(new Vector2f(400, 100), new Vector2f(256, 256)));
+        goomba.AddComponent(new SpriteRenderer(AssetPool.GetTexture("assets/textures/goomba.png")));;
+        this.AddGameObjectToScene(goomba);
 
         LoadResources();
     }
