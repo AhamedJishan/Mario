@@ -3,7 +3,6 @@ package Engine;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
-import util.Time;
 
 import java.awt.event.KeyEvent;
 
@@ -125,7 +124,7 @@ public class Window
 
     private void Loop()
     {
-        float beginTime = Time.GetTime();
+        float beginTime = (float) glfwGetTime();
         float endTime;
         float dt = -1.0f;
 
@@ -150,7 +149,7 @@ public class Window
             glfwSwapBuffers(glfwWindow);
 
             // deltaTime calculation
-            endTime = Time.GetTime();
+            endTime = (float) glfwGetTime();
             dt = endTime - beginTime;
             beginTime = endTime;
         }
