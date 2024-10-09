@@ -1,5 +1,6 @@
 package Renderer;
 
+import Components.Sprite;
 import Components.SpriteRenderer;
 import Engine.Window;
 import org.joml.Vector2f;
@@ -110,9 +111,23 @@ public class RenderBatch
 
     public void Render()
     {
-        // For now we will rebuffer all the data every frame
-        glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
+        boolean rebufferData = false;
+        for (int i = 0; i < numSprites; i++)
+        {
+            SpriteRenderer spr = sprites[i];
+            if (spr.IsDirty())
+            {
+                LoadVertexProperties(i);
+                spr.SetClean();
+                rebufferData = true;
+            }
+        }
+
+        if (rebufferData)
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, vboID);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
+        }
 
         // Use Shader
         shader.Use();

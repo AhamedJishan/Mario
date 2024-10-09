@@ -9,6 +9,9 @@ import util.AssetPool;
 
 public class LevelEditor extends Scene
 {
+    private GameObject mario;
+    private SpriteSheet spriteSheet;
+
     public LevelEditor()
     {
     }
@@ -20,9 +23,9 @@ public class LevelEditor extends Scene
 
         this.camera = new Camera(new Vector2f());
 
-        SpriteSheet spriteSheet = AssetPool.GetSpriteSheet("assets/textures/spritesheet.png");
+        spriteSheet = AssetPool.GetSpriteSheet("assets/textures/spritesheet.png");
 
-        GameObject mario = new GameObject("Mario", new Transform(new Vector2f(300, 100), new Vector2f(256, 256)));
+        mario = new GameObject("Mario", new Transform(new Vector2f(300, 100), new Vector2f(256, 256)));
         mario.AddComponent(new SpriteRenderer(spriteSheet.GetSprite(0)));
         this.AddGameObjectToScene(mario);
 
@@ -40,9 +43,23 @@ public class LevelEditor extends Scene
                         16, 16, 26, 0));
     }
 
+    private int spriteIndex = 0;
+    private float spriteFlipTime = 0.2f;
+    private float spriteFlipTimeLeft = 0.0f;
     @Override
     public void Update(float dt)
     {
+        spriteFlipTimeLeft -= dt;
+        if (spriteFlipTimeLeft <= 0.0f)
+        {
+            spriteFlipTimeLeft = spriteFlipTime;
+            spriteIndex++;
+            if (spriteIndex >= 4)
+                spriteIndex = 1;
+
+            mario.GetComponent(SpriteRenderer.class).SetSprite(spriteSheet.GetSprite(spriteIndex));
+        }
+
         for (GameObject gameObject: this.gameObjects) gameObject.Update(dt);
 
         this.renderer.Render();
