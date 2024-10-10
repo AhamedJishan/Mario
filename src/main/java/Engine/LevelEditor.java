@@ -9,8 +9,8 @@ import util.AssetPool;
 
 public class LevelEditor extends Scene
 {
-    private GameObject mario;
-    private SpriteSheet spriteSheet;
+    private GameObject obj1;
+    private GameObject obj2;
 
     public LevelEditor()
     {
@@ -23,43 +23,26 @@ public class LevelEditor extends Scene
 
         this.camera = new Camera(new Vector2f());
 
-        spriteSheet = AssetPool.GetSpriteSheet("assets/textures/spritesheet.png");
+        obj1 = new GameObject("Obj1",
+                new Transform(new Vector2f(200, 100), new Vector2f(256, 256)), 1);
+        obj1.AddComponent(new SpriteRenderer(new Sprite(AssetPool.GetTexture("assets/textures/blendimage1.png"))));
+        this.AddGameObjectToScene(obj1);
 
-        mario = new GameObject("Mario", new Transform(new Vector2f(300, 100), new Vector2f(256, 256)));
-        mario.AddComponent(new SpriteRenderer(spriteSheet.GetSprite(0)));
-        this.AddGameObjectToScene(mario);
-
-        GameObject goomba = new GameObject("Goomba", new Transform(new Vector2f(700, 100), new Vector2f(256, 256)));
-        goomba.AddComponent(new SpriteRenderer(spriteSheet.GetSprite(15)));
-        this.AddGameObjectToScene(goomba);
+        obj2 = new GameObject("Obj2",
+                new Transform(new Vector2f(400, 100), new Vector2f(256, 256)), 0);
+        obj2.AddComponent(new SpriteRenderer(new Sprite(AssetPool.GetTexture("assets/textures/blendimage2.png"))));
+        this.AddGameObjectToScene(obj2);
     }
 
     private void LoadResources()
     {
         AssetPool.GetShader("assets/shaders/default.glsl");
-
-        AssetPool.AddSpriteSheet("assets/textures/spritesheet.png",
-                new SpriteSheet(AssetPool.GetTexture("assets/textures/spritesheet.png"),
-                        16, 16, 26, 0));
     }
 
-    private int spriteIndex = 0;
-    private float spriteFlipTime = 0.2f;
-    private float spriteFlipTimeLeft = 0.0f;
+
     @Override
     public void Update(float dt)
     {
-        spriteFlipTimeLeft -= dt;
-        if (spriteFlipTimeLeft <= 0.0f)
-        {
-            spriteFlipTimeLeft = spriteFlipTime;
-            spriteIndex++;
-            if (spriteIndex >= 4)
-                spriteIndex = 1;
-
-            mario.GetComponent(SpriteRenderer.class).SetSprite(spriteSheet.GetSprite(spriteIndex));
-        }
-
         for (GameObject gameObject: this.gameObjects) gameObject.Update(dt);
 
         this.renderer.Render();

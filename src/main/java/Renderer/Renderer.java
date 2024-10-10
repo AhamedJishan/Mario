@@ -4,6 +4,7 @@ import Components.SpriteRenderer;
 import Engine.GameObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Renderer
@@ -28,7 +29,7 @@ public class Renderer
         boolean added = false;
         for (RenderBatch batch : batches)
         {
-            if (batch.HasRoom())
+            if (batch.HasRoom() && batch.ZIndex() == sprite.gameObject.ZIndex())
             {
                 Texture tex = sprite.GetTexture();
                 if (tex == null || (batch.HasTexture(tex) || batch.HasTextureRoom() ))
@@ -42,10 +43,11 @@ public class Renderer
 
         if (!added)
         {
-            RenderBatch newBatch = new RenderBatch(MAX_BATCH_SIZE);
+            RenderBatch newBatch = new RenderBatch(MAX_BATCH_SIZE, sprite.gameObject.ZIndex());
             newBatch.Start();
             batches.add(newBatch);
             newBatch.AddSprite(sprite);
+            Collections.sort(batches);
         }
     }
 

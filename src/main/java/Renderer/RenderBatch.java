@@ -3,6 +3,7 @@ package Renderer;
 import Components.Sprite;
 import Components.SpriteRenderer;
 import Engine.Window;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import util.AssetPool;
@@ -17,7 +18,7 @@ import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
-public class RenderBatch
+public class RenderBatch implements Comparable<RenderBatch>
 {
     // --------------------------------VERTEX-----------------------------------------
     // ===============================================================================
@@ -47,9 +48,11 @@ public class RenderBatch
     private int vaoID, vboID;
     private int maxBatchSize;
     private Shader shader;
+    private int zIndex;
 
-    public RenderBatch(int maxBatchSize)
+    public RenderBatch(int maxBatchSize, int zIndex)
     {
+        this.zIndex = zIndex;
         shader = AssetPool.GetShader("assets/shaders/default.glsl");
         this.sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
@@ -244,4 +247,14 @@ public class RenderBatch
         return this.textures.contains(tex);
     }
 
+    public int ZIndex()
+    {
+        return this.zIndex;
+    }
+
+    // For sort()
+    @Override
+    public int compareTo(RenderBatch o) {
+        return Integer.compare(this.zIndex, o.ZIndex());
+    }
 }
