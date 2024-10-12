@@ -2,6 +2,7 @@ package Engine;
 
 import Components.SpriteRenderer;
 import Renderer.Renderer;
+import imgui.ImGui;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -14,6 +15,7 @@ public abstract class Scene
     protected Camera camera;
     private boolean isRunning = false;
     protected List<GameObject> gameObjects = new ArrayList<>();
+    protected GameObject activeGameObject = null;
 
     public Scene()
     {
@@ -53,5 +55,22 @@ public abstract class Scene
     public Camera GetCamera()
     {
         return this.camera;
+    }
+
+    public void SceneGUI()
+    {
+        if (activeGameObject != null)
+        {
+            ImGui.begin(activeGameObject.name + ": Inspector");
+            activeGameObject.GUI();
+            ImGui.end();
+        }
+
+        GUI();
+    }
+
+    public void GUI()
+    {
+
     }
 }

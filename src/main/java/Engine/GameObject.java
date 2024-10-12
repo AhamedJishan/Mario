@@ -5,7 +5,7 @@ import java.util.List;
 
 public class GameObject
 {
-    private String name;
+    public String name;
     private List<Component> components;
     public Transform transform;
     private int zIndex;
@@ -73,6 +73,12 @@ public class GameObject
     public void Start()
     {
         for (Component component : components) component.Start();
+    }
+
+    public void GUI()
+    {
+        for (Component c : components)
+            c.GUI();
     }
 
     public int ZIndex()

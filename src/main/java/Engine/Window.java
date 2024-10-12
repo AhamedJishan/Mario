@@ -163,7 +163,7 @@ public class Window
                 Window.ChangeScene(1);
 
             // Update GUI
-            this.guiLayer.Update(dt);
+            this.guiLayer.Update(dt, currentScene);
 
             glfwSwapBuffers(glfwWindow);
 

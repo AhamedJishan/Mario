@@ -1,5 +1,6 @@
 package Engine;
 
+import imgui.ImFont;
 import imgui.ImGui;
 import imgui.ImGuiIO;
 import imgui.flag.ImGuiConfigFlags;
@@ -23,8 +24,10 @@ public class ImGuiLayer
         imGuiGl3.init(glslVersion);
 
         final ImGuiIO io = ImGui.getIO();
-        io.setIniFilename(null); // We don't want to save .ini file
+        io.setIniFilename("imgui.ini"); // We don't want to save .ini file
         io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard);
+
+        io.getFonts().addFontFromFileTTF("assets/fonts/segoeui.ttf", 20);
     }
 
     public void Dispose()
@@ -34,10 +37,13 @@ public class ImGuiLayer
         ImGui.destroyContext();
     }
 
-    public void Update(float dt)
+    public void Update(float dt, Scene currentScene)
     {
         BeginFrame();
+
+        currentScene.SceneGUI();
         ImGui.showDemoWindow();
+
         EndFrame();
     }
 

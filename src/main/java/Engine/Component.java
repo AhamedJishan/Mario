@@ -9,5 +9,13 @@ public abstract class Component
 
     }
 
-    public abstract void Update();
+    public void Update()
+    {
+
+    }
+
+    public void GUI()
+    {
+
+    }
 }
