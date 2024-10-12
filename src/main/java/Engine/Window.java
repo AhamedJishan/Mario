@@ -17,6 +17,8 @@ public class Window
     private String title;
     private long glfwWindow;
 
+    private ImGuiLayer guiLayer;
+
     private static Window window = null;
 
     private static Scene currentScene = null;
@@ -69,6 +71,8 @@ public class Window
         Init();
         Loop();
 
+        guiLayer.Dispose();
+
         // Free the memory
         glfwFreeCallbacks(glfwWindow);
         glfwDestroyWindow(glfwWindow);
@@ -103,6 +107,10 @@ public class Window
         glfwSetMouseButtonCallback(glfwWindow, MouseListener::MouseButtonCallback);
         glfwSetScrollCallback(glfwWindow, MouseListener::MouseScrollCallback);
         glfwSetKeyCallback(glfwWindow, KeyListener::KeyCallback);
+        glfwSetWindowSizeCallback(glfwWindow, (w, newWidth, newHeight)->{
+            Window.SetWidth(newWidth);
+            Window.SetHeight(newHeight);
+        });
 
         // Make the Opengl Context current
         glfwMakeContextCurrent(glfwWindow);
@@ -122,6 +130,10 @@ public class Window
         // Enable alpha blending
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        // Initialising ImGui Layer
+        this.guiLayer = new ImGuiLayer();
+        this.guiLayer.InitImGUI(glfwWindow);
 
         Window.ChangeScene(0);
     }
@@ -150,6 +162,9 @@ public class Window
             if (KeyListener.IsKeyPressed(KeyEvent.VK_2))
                 Window.ChangeScene(1);
 
+            // Update GUI
+            this.guiLayer.Update(dt);
+
             glfwSwapBuffers(glfwWindow);
 
             // deltaTime calculation
@@ -157,5 +172,25 @@ public class Window
             dt = endTime - beginTime;
             beginTime = endTime;
         }
+    }
+
+    public static int GetWidth()
+    {
+        return Get().width;
+    }
+
+    public static void SetWidth(int newWidth)
+    {
+        Get().width = newWidth;
+    }
+
+    public static int GetHeight()
+    {
+        return Get().height;
+    }
+
+    public static void SetHeight(int newHeight)
+    {
+        Get().height = newHeight;
     }
 }
