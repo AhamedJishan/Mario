@@ -3,6 +3,8 @@ package Engine;
 import Components.Sprite;
 import Components.SpriteRenderer;
 import Components.SpriteSheet;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import imgui.ImGui;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
@@ -26,15 +28,23 @@ public class LevelEditor extends Scene
 
         obj1 = new GameObject("Obj1",
                 new Transform(new Vector2f(200, 100), new Vector2f(256, 256)), 1);
-        //obj1.AddComponent(new SpriteRenderer(new Sprite(AssetPool.GetTexture("assets/textures/blendimage1.png"))));
-        obj1.AddComponent(new SpriteRenderer(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f)));
+        SpriteRenderer obj1SpriteRenderer = new SpriteRenderer();
+        obj1SpriteRenderer.SetColor(new Vector4f(0.3f, 0.3f, 0.6f, 0.7f));
+        obj1.AddComponent(obj1SpriteRenderer);
         this.AddGameObjectToScene(obj1);
         this.activeGameObject = obj1;
 
         obj2 = new GameObject("Obj2",
                 new Transform(new Vector2f(400, 100), new Vector2f(256, 256)), 0);
-        obj2.AddComponent(new SpriteRenderer(new Sprite(AssetPool.GetTexture("assets/textures/blendimage2.png"))));
+        SpriteRenderer obj2SpriteRenderer = new SpriteRenderer();
+        Sprite obj2Sprite = new Sprite();
+        obj2Sprite.SetTexture(AssetPool.GetTexture("assets/textures/blendimage2.png"));
+        obj2SpriteRenderer.SetSprite(obj2Sprite);
+        obj2.AddComponent(obj2SpriteRenderer);
         this.AddGameObjectToScene(obj2);
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(gson.toJson(obj1));
     }
 
     private void LoadResources()

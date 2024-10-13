@@ -4,6 +4,7 @@ import imgui.ImFont;
 import imgui.ImGui;
 import imgui.ImGuiIO;
 import imgui.flag.ImGuiConfigFlags;
+import imgui.flag.ImGuiWindowFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
 
@@ -26,6 +27,7 @@ public class ImGuiLayer
         final ImGuiIO io = ImGui.getIO();
         io.setIniFilename("imgui.ini"); // We don't want to save .ini file
         io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard);
+        io.setConfigFlags(ImGuiConfigFlags.DockingEnable);
 
         io.getFonts().addFontFromFileTTF("assets/fonts/segoeui.ttf", 20);
     }

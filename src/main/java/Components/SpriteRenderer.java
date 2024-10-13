@@ -10,24 +10,24 @@ import org.joml.Vector4f;
 
 public class SpriteRenderer extends Component
 {
-    private Vector4f color;
-    private Sprite sprite;
+    private Vector4f color = new Vector4f(1, 1, 1, 1);
+    private Sprite sprite = new Sprite();
 
-    private Transform lastTransform;
-    private boolean isDirty= false;
+    private transient Transform lastTransform;
+    private transient boolean isDirty = true;
 
-    public SpriteRenderer(Vector4f color) {
-        this.color = color;
-        this.sprite = new Sprite(null);
-        this.isDirty = true;
-    }
-
-    public SpriteRenderer(Sprite sprite)
-    {
-        this.sprite = sprite;
-        this.color = new Vector4f(1, 1, 1, 1);
-        this.isDirty = true;
-    }
+//    public SpriteRenderer(Vector4f color) {
+//        this.color = color;
+//        this.sprite = new Sprite(null);
+//        this.isDirty = true;
+//    }
+//
+//    public SpriteRenderer(Sprite sprite)
+//    {
+//        this.sprite = sprite;
+//        this.color = new Vector4f(1, 1, 1, 1);
+//        this.isDirty = true;
+//    }
 
     @Override
     public void Start()
@@ -62,6 +62,15 @@ public class SpriteRenderer extends Component
         return this.color;
     }
 
+    public void SetColor(Vector4f color)
+    {
+        if (!this.color.equals(color))
+        {
+            this.color = color;
+            this.isDirty = true;
+        }
+    }
+
     public Texture GetTexture()
     {
         return sprite.GetTexture();
@@ -78,15 +87,6 @@ public class SpriteRenderer extends Component
         isDirty = true;
     }
 
-    public void SetColor(Vector4f color)
-    {
-        if (!this.color.equals(this.color))
-        {
-            this.color = color;
-            this.isDirty = true;
-        }
-    }
-
     public boolean IsDirty()
     {
         return this.isDirty;
@@ -96,4 +96,5 @@ public class SpriteRenderer extends Component
     {
         this.isDirty = false;
     }
+
 }
