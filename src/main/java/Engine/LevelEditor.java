@@ -23,8 +23,13 @@ public class LevelEditor extends Scene
     public void Init()
     {
         LoadResources();
-
         this.camera = new Camera(new Vector2f());
+
+        if (levelLoaded)
+        {
+            System.out.println("Loading the level");
+            return;
+        }
 
         obj1 = new GameObject("Obj1",
                 new Transform(new Vector2f(200, 100), new Vector2f(256, 256)), 1);
@@ -42,9 +47,6 @@ public class LevelEditor extends Scene
         obj2SpriteRenderer.SetSprite(obj2Sprite);
         obj2.AddComponent(obj2SpriteRenderer);
         this.AddGameObjectToScene(obj2);
-
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        System.out.println(gson.toJson(obj1));
     }
 
     private void LoadResources()
