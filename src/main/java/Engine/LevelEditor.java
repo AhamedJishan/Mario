@@ -1,5 +1,6 @@
 package Engine;
 
+import Components.Rigidbody;
 import Components.Sprite;
 import Components.SpriteRenderer;
 import Components.SpriteSheet;
@@ -28,6 +29,7 @@ public class LevelEditor extends Scene
         if (levelLoaded)
         {
             System.out.println("Loading the level");
+            this.activeGameObject = gameObjects.get(0);
             return;
         }
 
@@ -36,8 +38,8 @@ public class LevelEditor extends Scene
         SpriteRenderer obj1SpriteRenderer = new SpriteRenderer();
         obj1SpriteRenderer.SetColor(new Vector4f(0.3f, 0.3f, 0.6f, 0.7f));
         obj1.AddComponent(obj1SpriteRenderer);
+        obj1.AddComponent(new Rigidbody());
         this.AddGameObjectToScene(obj1);
-        this.activeGameObject = obj1;
 
         obj2 = new GameObject("Obj2",
                 new Transform(new Vector2f(400, 100), new Vector2f(256, 256)), 0);

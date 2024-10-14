@@ -6,10 +6,10 @@
         "type": "Components.SpriteRenderer",
         "properties": {
           "color": {
-            "x": 1.0,
-            "y": 0.6374583,
-            "z": 0.60150373,
-            "w": 0.34586465
+            "x": 0.3,
+            "y": 0.3,
+            "z": 0.6,
+            "w": 0.31578946
           },
           "sprite": {
             "texCoords": [
@@ -30,6 +30,19 @@
                 "y": 1.0
               }
             ]
+          }
+        }
+      },
+      {
+        "type": "Components.Rigidbody",
+        "properties": {
+          "colliderType": 427,
+          "friction": 0.8,
+          "isKinematic": true,
+          "velocity": {
+            "x": 0.0,
+            "y": -9.8,
+            "z": 0.0
           }
         }
       }
