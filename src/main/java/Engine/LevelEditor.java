@@ -7,6 +7,7 @@ import Components.SpriteSheet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import imgui.ImGui;
+import imgui.ImVec2;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import util.AssetPool;
@@ -15,6 +16,7 @@ public class LevelEditor extends Scene
 {
     private GameObject obj1;
     private GameObject obj2;
+    private SpriteSheet sprites;
 
     public LevelEditor()
     {
@@ -25,7 +27,7 @@ public class LevelEditor extends Scene
     {
         LoadResources();
         this.camera = new Camera(new Vector2f());
-
+        sprites = AssetPool.GetSpriteSheet("assets/textures/spritesheets/decorationsAndBlocks.png");
         if (levelLoaded)
         {
             System.out.println("Loading the level");
@@ -54,6 +56,12 @@ public class LevelEditor extends Scene
     private void LoadResources()
     {
         AssetPool.GetShader("assets/shaders/default.glsl");
+
+        // TODO: FIX TEXTURE SAVE SYSTEM TO USE PATH INSTEAD OF ID
+        AssetPool.GetTexture("assets/textures/blendimage2.png");
+        AssetPool.AddSpriteSheet("assets/textures/spritesheets/decorationsAndBlocks.png",
+                new SpriteSheet(AssetPool.GetTexture("assets/textures/spritesheets/decorationsAndBlocks.png"),
+                        16, 16, 81, 0));
     }
 
 
@@ -69,7 +77,40 @@ public class LevelEditor extends Scene
     public void GUI()
     {
         ImGui.begin("Test Window");
-        ImGui.text("Some random Text");
+
+        ImVec2 windowPos = new ImVec2();
+        ImGui.getWindowPos(windowPos);
+        ImVec2 windowSize = new ImVec2();
+        ImGui.getWindowSize(windowSize);
+        ImVec2 itemSpacing = new ImVec2();
+        ImGui.getStyle().getItemSpacing(itemSpacing);
+
+        float windowX2 = windowPos.x + windowSize.x;
+        for (int i = 0; i < sprites.Size(); i++)
+        {
+            Sprite sprite = sprites.GetSprite(i);
+            float width = sprite.GetWidth() * 3;
+            float height = sprite.GetHeight() * 3;
+            int id = sprite.GetTexID();
+            Vector2f[] texCoords = sprite.GetTexCoords();
+
+            ImGui.pushID(i);
+            // Getting texCoords[0] and [2] as 0 is topRight and 2 bottom left
+            if (ImGui.imageButton(id, width, height, texCoords[0].x, texCoords[0].y, texCoords[2].x, texCoords[2].y))
+            {
+                System.out.println("Button " + i + " clicked!");
+            }
+            ImGui.popID();
+
+            ImVec2 lastButtonPos = new ImVec2();
+            ImGui.getItemRectMax(lastButtonPos);
+            float lastButtonX2 = lastButtonPos.x;
+            float nextButtonX2 = lastButtonX2 + itemSpacing.x + width;
+            if (i + 1 < sprites.Size() && nextButtonX2 < windowX2)
+                ImGui.sameLine();
+
+        }
+
         ImGui.end();
     }
 }

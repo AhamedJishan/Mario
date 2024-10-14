@@ -34,6 +34,8 @@ public class SpriteSheet
             Sprite sprite = new Sprite();
             sprite.SetTexture(this.texture);
             sprite.SetTexCoords(texCoords);
+            sprite.SetWidth(spriteWidth);
+            sprite.SetHeight(spriteHeight);
             sprites.add(sprite);
 
             currentX += spriteWidth + spacing;
@@ -49,6 +51,11 @@ public class SpriteSheet
     public Sprite GetSprite(int index)
     {
         return this.sprites.get(index);
+    }
+
+    public int Size()
+    {
+        return sprites.size();
     }
 
 }

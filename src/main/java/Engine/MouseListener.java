@@ -1,5 +1,6 @@
 package Engine;
 
+import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
@@ -113,5 +114,27 @@ public class MouseListener
         {
             return false;
         }
+    }
+
+    public static float GetOrthoX()
+    {
+        float currentX = GetX();
+        currentX = (currentX / (float)Window.GetWidth()) * 2.0f - 1.0f;
+        Vector4f tmp = new Vector4f(currentX, 0, 0, 1);
+        tmp.mul(Window.GetScene().GetCamera().GetInverseProjection()).mul(Window.GetScene().GetCamera().GetInverseView());
+        currentX = tmp.x;
+
+        return currentX;
+    }
+
+    public static float GetOrthoY()
+    {
+        float currentY = GetY();
+        currentY = (currentY / (float)Window.GetHeight()) * 2.0f - 1.0f;
+        Vector4f tmp = new Vector4f(0, currentY, 0, 1);
+        tmp.mul(Window.GetScene().GetCamera().GetInverseProjection()).mul(Window.GetScene().GetCamera().GetInverseView());
+        currentY = tmp.y;
+
+        return currentY;
     }
 }

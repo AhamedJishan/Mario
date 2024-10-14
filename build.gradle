@@ -8,7 +8,7 @@ version = '1.0-SNAPSHOT'
 project.ext.lwjglVersion = "3.3.4"
 project.ext.jomlVersion = "1.10.7"
 project.ext.lwjglNatives = "natives-windows"
-project.ext.imguiVersion = "1.87.0"
+project.ext.imguiVersion = "1.87.5"
 
 repositories {
     mavenCentral()
