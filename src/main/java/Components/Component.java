@@ -1,5 +1,6 @@
-package Engine;
+package Components;
 
+import Engine.GameObject;
 import imgui.ImGui;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -9,6 +10,9 @@ import java.lang.reflect.Modifier;
 
 public abstract class Component
 {
+    private static int ID_COUNTER = 0;
+    private int uid = -1;
+
     public transient GameObject gameObject = null;
 
     public void Start()
@@ -16,7 +20,7 @@ public abstract class Component
 
     }
 
-    public void Update()
+    public void Update(float dt)
     {
 
     }
@@ -84,5 +88,21 @@ public abstract class Component
         {
             e.printStackTrace();
         }
+    }
+
+    public void GenerateID()
+    {
+        if (this.uid == -1)
+            this.uid = ID_COUNTER++;
+    }
+
+    public int GetUid()
+    {
+        return this.uid;
+    }
+
+    public static void Init(int maxId)
+    {
+        ID_COUNTER = maxId;
     }
 }

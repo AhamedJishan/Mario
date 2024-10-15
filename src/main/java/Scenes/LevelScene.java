@@ -1,4 +1,4 @@
-package Engine;
+package Scenes;
 
 public class LevelScene extends Scene
 {

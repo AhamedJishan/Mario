@@ -1,12 +1,14 @@
-package Engine;
+package Scenes;
 
-import Components.SpriteRenderer;
+import Components.Component;
+import Components.ComponentDeserializer;
+import Engine.Camera;
+import Engine.GameObject;
+import Engine.GameObjectDeserializer;
 import Renderer.Renderer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import imgui.ImGui;
-import org.joml.Vector2f;
-import org.joml.Vector4f;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -121,11 +123,27 @@ public abstract class Scene
 
         if (!inFile.equals(""))
         {
+            int maxGoId = -1;
+            int maxCompId = -1;
             GameObject[] objs = gson.fromJson(inFile, GameObject[].class);
             for (int i = 0; i < objs.length; i++)
             {
                 AddGameObjectToScene(objs[i]);
+
+                for (Component c : objs[i].GetAllComponents())
+                {
+                    if (c.GetUid() > maxCompId)
+                        maxCompId = c.GetUid();
+                }
+
+                if (objs[i].GetUid() > maxGoId)
+                    maxCompId = objs[i].GetUid();
             }
+
+            maxGoId++;
+            maxCompId++;
+            GameObject.Init(maxGoId);
+            Component.Init(maxCompId);
             this.levelLoaded = true;
         }
     }

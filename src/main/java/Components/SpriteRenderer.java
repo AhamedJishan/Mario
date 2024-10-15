@@ -1,6 +1,5 @@
 package Components;
 
-import Engine.Component;
 import Engine.Transform;
 import Renderer.Texture;
 import imgui.ImGui;
@@ -36,7 +35,7 @@ public class SpriteRenderer extends Component
     }
 
     @Override
-    public void Update()
+    public void Update(float dt)
     {
         if (!this.lastTransform.equals(this.gameObject.transform))
         {

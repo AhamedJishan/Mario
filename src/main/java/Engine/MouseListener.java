@@ -104,7 +104,7 @@ public class MouseListener
         return (float) Get().scrollY;
     }
 
-    public static boolean mouseButtonDown(int button)
+    public static boolean MouseButtonDown(int button)
     {
         if (button < Get().mouseButtonPressed.length)
         {
@@ -129,7 +129,7 @@ public class MouseListener
 
     public static float GetOrthoY()
     {
-        float currentY = GetY();
+        float currentY = Window.GetHeight() - GetY();
         currentY = (currentY / (float)Window.GetHeight()) * 2.0f - 1.0f;
         Vector4f tmp = new Vector4f(0, currentY, 0, 1);
         tmp.mul(Window.GetScene().GetCamera().GetInverseProjection()).mul(Window.GetScene().GetCamera().GetInverseView());

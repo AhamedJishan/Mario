@@ -1,5 +1,8 @@
 package Engine;
 
+import Scenes.LevelEditor;
+import Scenes.LevelScene;
+import Scenes.Scene;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;

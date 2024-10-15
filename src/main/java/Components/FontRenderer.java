@@ -1,7 +1,5 @@
 package Components;
 
-import Engine.Component;
-
 public class FontRenderer extends Component
 {
     @Override
@@ -11,7 +9,7 @@ public class FontRenderer extends Component
     }
 
     @Override
-    public void Update() {
+    public void Update(float dt) {
 
     }
 }

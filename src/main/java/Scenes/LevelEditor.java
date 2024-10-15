@@ -1,11 +1,10 @@
-package Engine;
+package Scenes;
 
-import Components.Rigidbody;
-import Components.Sprite;
-import Components.SpriteRenderer;
-import Components.SpriteSheet;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import Components.*;
+import Engine.Camera;
+import Engine.GameObject;
+import Engine.Prefabs;
+import Engine.Transform;
 import imgui.ImGui;
 import imgui.ImVec2;
 import org.joml.Vector2f;
@@ -17,6 +16,8 @@ public class LevelEditor extends Scene
     private GameObject obj1;
     private GameObject obj2;
     private SpriteSheet sprites;
+
+    MouseControls mouseControls = new MouseControls();
 
     public LevelEditor()
     {
@@ -68,6 +69,8 @@ public class LevelEditor extends Scene
     @Override
     public void Update(float dt)
     {
+        mouseControls.Update(dt);
+
         for (GameObject gameObject: this.gameObjects) gameObject.Update(dt);
 
         this.renderer.Render();
@@ -98,7 +101,9 @@ public class LevelEditor extends Scene
             // Getting texCoords[0] and [2] as 0 is topRight and 2 bottom left
             if (ImGui.imageButton(id, width, height, texCoords[0].x, texCoords[0].y, texCoords[2].x, texCoords[2].y))
             {
-                System.out.println("Button " + i + " clicked!");
+                GameObject object = Prefabs.GenerateSpriteObject(sprite, width, height);
+                // Attach this gameobject to the mouse cursor
+                mouseControls.PickupObject(object);
             }
             ImGui.popID();
 
