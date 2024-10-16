@@ -7,7 +7,8 @@ import org.joml.Vector3f;
 public class Camera
 {
     private Matrix4f projectionMatrix, viewMatrix, inverseProjection, inverseView;
-    private Vector2f position;
+    public Vector2f position;
+    private Vector2f projectionSize = new Vector2f(32.0f * 40.0f, 32.0f * 21.0f);
 
     public Camera(Vector2f position)
     {
@@ -49,5 +50,10 @@ public class Camera
     public Matrix4f GetInverseView()
     {
         return inverseView;
+    }
+
+    public Vector2f GetProjectionSize()
+    {
+        return projectionSize;
     }
 }

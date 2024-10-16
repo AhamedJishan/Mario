@@ -154,7 +154,7 @@ public class Window
 
             DebugDraw.BeginFrame();
 
-            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+            glClearColor(1, 1, 1, 1);
             glClear(GL_COLOR_BUFFER_BIT);
 
             // Updating the scene

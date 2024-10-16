@@ -29,7 +29,7 @@ public class DebugDraw
     private static int vboID;
 
     private static boolean started = false;
-    // TODO: TEMPORARY WORKAROUND
+    // NOTE: TEMPORARY WORKAROUND
     private static boolean lineListEdited = false;
 
     public static void Start()
