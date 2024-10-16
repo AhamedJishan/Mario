@@ -1,5 +1,6 @@
 package Engine;
 
+import Renderer.DebugDraw;
 import Scenes.LevelEditor;
 import Scenes.LevelScene;
 import Scenes.Scene;
@@ -151,12 +152,17 @@ public class Window
             // Poll events
             glfwPollEvents();
 
+            DebugDraw.BeginFrame();
+
             glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             // Updating the scene
             if (dt >= 0)
+            {
+                DebugDraw.Draw();
                 currentScene.Update(dt);
+            }
 
             // Testing Scene change
             if (KeyListener.IsKeyPressed(KeyEvent.VK_1))

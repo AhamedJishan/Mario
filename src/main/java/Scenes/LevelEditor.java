@@ -1,15 +1,17 @@
 package Scenes;
 
 import Components.*;
-import Engine.Camera;
-import Engine.GameObject;
-import Engine.Prefabs;
-import Engine.Transform;
+import Engine.*;
+import Renderer.DebugDraw;
 import imgui.ImGui;
 import imgui.ImVec2;
+import org.joml.Math;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 import util.AssetPool;
+
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 
 public class LevelEditor extends Scene
 {
@@ -28,6 +30,7 @@ public class LevelEditor extends Scene
     {
         LoadResources();
         this.camera = new Camera(new Vector2f());
+        DebugDraw.AddLine2D(new Vector2f(0,0), new Vector2f(800, 500), new Vector3f(1,0,0), 144);
         sprites = AssetPool.GetSpriteSheet("assets/textures/spritesheets/decorationsAndBlocks.png");
         if (levelLoaded)
         {
@@ -66,10 +69,16 @@ public class LevelEditor extends Scene
     }
 
 
+    float t = 0.0f;
     @Override
     public void Update(float dt)
     {
         mouseControls.Update(dt);
+
+        float x = ((float)Math.sin(t) * 200.0f) + 600;
+        float y = ((float)Math.cos(t) * 200.0f) + 400;
+        t += 0.05f;
+        DebugDraw.AddLine2D(new Vector2f(600, 400), new Vector2f(x, y), new Vector3f(0, 0, 1));
 
         for (GameObject gameObject: this.gameObjects) gameObject.Update(dt);
 
