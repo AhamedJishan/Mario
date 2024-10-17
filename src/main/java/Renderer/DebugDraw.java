@@ -4,6 +4,7 @@ import Engine.Window;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import util.AssetPool;
+import util.JMath;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,7 +50,7 @@ public class DebugDraw
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
 
-        glLineWidth(2.0f);
+        //glLineWidth(2.0f);
     }
 
     public static void BeginFrame()
@@ -121,12 +122,12 @@ public class DebugDraw
         shader.Detach();
     }
 
-    // ========================================================
-    // Add Line2D methods
-    // ========================================================
+    // ==========================================================================
+    // --------------------------Add Line2D methods------------------------------
+    // ==========================================================================
     public static void AddLine2D(Vector2f from, Vector2f to)
     {
-        AddLine2D(from, to, new Vector3f(1.0f, 0.0f, 0.0f), 1);
+        AddLine2D(from, to, new Vector3f(0.0f, 0.0f, 1.0f), 1);
     }
 
     public static void AddLine2D(Vector2f from, Vector2f to, Vector3f color)
@@ -138,5 +139,73 @@ public class DebugDraw
     {
         if (lines.size() >= MAX_LINES) return;
         DebugDraw.lines.add(new Line2D(from, to, color, lifeTime));
+    }
+
+    // ==========================================================================
+    // --------------------------Add Box2D methods------------------------------
+    // ==========================================================================
+    public static void AddBox2D(Vector2f center, Vector2f dimensions, float rotation)
+    {
+        AddBox2D(center, dimensions, rotation, new Vector3f(0.0f, 0.0f, 1.0f), 1);
+    }
+
+    public static void AddBox2D(Vector2f center, Vector2f dimensions, float rotation, Vector3f color)
+    {
+        AddBox2D(center, dimensions, rotation, color, 1);
+    }
+
+    public static void AddBox2D(Vector2f center, Vector2f dimensions, float rotation, Vector3f color, int lifeTime)
+    {
+        Vector2f min = new Vector2f(center).sub(new Vector2f(dimensions).mul(0.5f));
+        Vector2f max = new Vector2f(center).add(new Vector2f(dimensions).mul(0.5f));
+
+        Vector2f[] vertices = {
+                new Vector2f(min.x, min.y), new Vector2f(min.x, max.y),
+                new Vector2f(max.x, max.y), new Vector2f(max.x, min.y)
+        };
+
+        if (rotation != 0.0f)
+        {
+            for (Vector2f vertex : vertices)
+                JMath.rotate(vertex, rotation, center);
+        }
+
+        AddLine2D(vertices[0], vertices[1], color, lifeTime);
+        AddLine2D(vertices[1], vertices[2], color, lifeTime);
+        AddLine2D(vertices[2], vertices[3], color, lifeTime);
+        AddLine2D(vertices[3], vertices[0], color, lifeTime);
+    }
+
+    // ==========================================================================
+    // --------------------------Add Circle2D methods----------------------------
+    // ==========================================================================
+    public static void AddCircle2D(Vector2f center, float radius)
+    {
+        AddCircle2D(center, radius, new Vector3f(0.0f, 0.0f, 1.0f), 1);
+    }
+
+    public static void AddCircle2D(Vector2f center, float radius, Vector3f color)
+    {
+        AddCircle2D(center, radius, color, 1);
+    }
+
+    public static void AddCircle2D(Vector2f center, float radius, Vector3f color, int lifeTime)
+    {
+        Vector2f[] vertices = new Vector2f[20];
+
+        int increment = 360/vertices.length;
+        int curAngle = 0;
+        for (int i =0; i < vertices.length; i++)
+        {
+            Vector2f tmp = new Vector2f(radius, 0);
+            JMath.rotate(tmp, curAngle, new Vector2f());
+            vertices[i] = new Vector2f(tmp).add(center);
+
+            if (i > 0)
+                AddLine2D(vertices[i-1], vertices[i], color, lifeTime);
+
+            curAngle += increment;
+        }
+        AddLine2D(vertices[0], vertices[vertices.length-1], color, lifeTime);
     }
 }

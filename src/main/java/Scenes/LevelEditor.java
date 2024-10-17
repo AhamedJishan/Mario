@@ -32,7 +32,7 @@ public class LevelEditor extends Scene
         levelManager.AddComponent(new GridLines());
 
         LoadResources();
-        this.camera = new Camera(new Vector2f(-250, 0));
+        this.camera = new Camera(new Vector2f());
         sprites = AssetPool.GetSpriteSheet("assets/textures/spritesheets/decorationsAndBlocks.png");
         if (levelLoaded)
         {
@@ -76,6 +76,9 @@ public class LevelEditor extends Scene
     public void Update(float dt)
     {
         levelManager.Update(dt);
+        t += 50 * dt;
+        DebugDraw.AddBox2D(new Vector2f(32*15, 32*10), new Vector2f(64, 32), t);
+        DebugDraw.AddCircle2D(new Vector2f(32*20, 32*10), 64, new Vector3f(1,0,0));
 
         for (GameObject gameObject: this.gameObjects) gameObject.Update(dt);
 
