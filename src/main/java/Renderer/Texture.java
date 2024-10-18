@@ -80,4 +80,22 @@ public class Texture
     {
         return this.texID;
     }
+
+    public String GetFilepath()
+    {
+        return this.filepath;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == null) return false;
+        if (!(o instanceof Texture)) return false;
+
+        Texture tex = (Texture)o;
+        return tex.GetWidth() == this.width &&
+                tex.GetHeight() == this.height &&
+                tex.GetID() == this.texID &&
+                tex.GetFilepath().equals(this.filepath);
+    }
 }
