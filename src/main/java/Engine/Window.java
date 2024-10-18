@@ -1,6 +1,7 @@
 package Engine;
 
 import Renderer.DebugDraw;
+import Renderer.Framebuffer;
 import Scenes.LevelEditor;
 import Scenes.LevelScene;
 import Scenes.Scene;
@@ -24,7 +25,6 @@ public class Window
     private ImGuiLayer guiLayer;
 
     private static Window window = null;
-
     private static Scene currentScene = null;
 
     private Window()
