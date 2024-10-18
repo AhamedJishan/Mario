@@ -36,8 +36,8 @@ public class LevelEditor extends Scene
         sprites = AssetPool.GetSpriteSheet("assets/textures/spritesheets/decorationsAndBlocks.png");
         if (levelLoaded)
         {
-            System.out.println("Loading the level");
-            this.activeGameObject = gameObjects.get(0);
+            if (this.gameObjects.size() > 0)
+                this.activeGameObject = gameObjects.get(0);
             return;
         }
 
@@ -68,6 +68,16 @@ public class LevelEditor extends Scene
         AssetPool.AddSpriteSheet("assets/textures/spritesheets/decorationsAndBlocks.png",
                 new SpriteSheet(AssetPool.GetTexture("assets/textures/spritesheets/decorationsAndBlocks.png"),
                         16, 16, 81, 0));
+
+        for (GameObject gameObject : gameObjects)
+        {
+            SpriteRenderer spriteRenderer = gameObject.GetComponent(SpriteRenderer.class);
+            if (spriteRenderer != null)
+            {
+                if (spriteRenderer.GetTexture() != null)
+                    spriteRenderer.SetTexture(AssetPool.GetTexture(spriteRenderer.GetTexture().GetFilepath()));
+            }
+        }
     }
 
 
@@ -101,8 +111,8 @@ public class LevelEditor extends Scene
         for (int i = 0; i < sprites.Size(); i++)
         {
             Sprite sprite = sprites.GetSprite(i);
-            float width = sprite.GetWidth() * 4;
-            float height = sprite.GetHeight() * 4;
+            float width = sprite.GetWidth() * 3;
+            float height = sprite.GetHeight() * 3;
             int id = sprite.GetTexID();
             Vector2f[] texCoords = sprite.GetTexCoords();
 

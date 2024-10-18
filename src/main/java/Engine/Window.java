@@ -23,6 +23,7 @@ public class Window
     private long glfwWindow;
 
     private ImGuiLayer guiLayer;
+    private Framebuffer framebuffer;
 
     private static Window window = null;
     private static Scene currentScene = null;
@@ -138,6 +139,8 @@ public class Window
         this.guiLayer = new ImGuiLayer();
         this.guiLayer.InitImGUI(glfwWindow);
 
+        this.framebuffer = new Framebuffer(1920, 1080);
+
         Window.ChangeScene(0);
     }
 
@@ -158,11 +161,13 @@ public class Window
             glClear(GL_COLOR_BUFFER_BIT);
 
             // Updating the scene
+            //framebuffer.Bind();
             if (dt >= 0)
             {
                 DebugDraw.Draw();
                 currentScene.Update(dt);
             }
+            framebuffer.Unbind();
 
             // Testing Scene change
             if (KeyListener.IsKeyPressed(KeyEvent.VK_1))
