@@ -1,5 +1,7 @@
 package Engine;
 
+import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
@@ -13,6 +15,9 @@ public class MouseListener
     private double xPos, yPos, lastX, lastY;
     private boolean mouseButtonPressed[] = new boolean[3];
     private boolean isDragging;
+
+    private Vector2f gameViewportPos = new Vector2f();
+    private Vector2f gameViewportSize = new Vector2f();
 
     private MouseListener()
     {
@@ -107,21 +112,22 @@ public class MouseListener
     public static boolean MouseButtonDown(int button)
     {
         if (button < Get().mouseButtonPressed.length)
-        {
             return Get().mouseButtonPressed[button];
-        }
         else
-        {
             return false;
-        }
     }
 
     public static float GetOrthoX()
     {
-        float currentX = GetX();
-        currentX = (currentX / (float)Window.GetWidth()) * 2.0f - 1.0f;
+        float currentX = GetX() - Get().gameViewportPos.x;
+        currentX = (currentX / Get().gameViewportSize.x) * 2.0f - 1.0f;
         Vector4f tmp = new Vector4f(currentX, 0, 0, 1);
-        tmp.mul(Window.GetScene().GetCamera().GetInverseProjection()).mul(Window.GetScene().GetCamera().GetInverseView());
+
+        Camera camera = Window.GetScene().GetCamera();
+        Matrix4f viewProjectionMat = new Matrix4f();
+        camera.GetInverseView().mul(camera.GetInverseProjection(), viewProjectionMat);
+        tmp.mul(viewProjectionMat);
+
         currentX = tmp.x;
 
         return currentX;
@@ -129,12 +135,27 @@ public class MouseListener
 
     public static float GetOrthoY()
     {
-        float currentY = Window.GetHeight() - GetY();
-        currentY = (currentY / (float)Window.GetHeight()) * 2.0f - 1.0f;
+        float currentY = GetY() - Get().gameViewportPos.y;
+        currentY = -((currentY / Get().gameViewportSize.y) * 2.0f - 1.0f);
         Vector4f tmp = new Vector4f(0, currentY, 0, 1);
-        tmp.mul(Window.GetScene().GetCamera().GetInverseProjection()).mul(Window.GetScene().GetCamera().GetInverseView());
+
+        Camera camera = Window.GetScene().GetCamera();
+        Matrix4f viewProjectionMat = new Matrix4f();
+        camera.GetInverseView().mul(camera.GetInverseProjection(), viewProjectionMat);
+        tmp.mul(viewProjectionMat);
+
         currentY = tmp.y;
 
         return currentY;
+    }
+
+    public static void SetgameViewportPos(Vector2f gameViewportPos)
+    {
+        Get().gameViewportPos = gameViewportPos;
+    }
+
+    public static void SetgameViewportSize(Vector2f gameViewportSize)
+    {
+        Get().gameViewportSize = gameViewportSize;
     }
 }
