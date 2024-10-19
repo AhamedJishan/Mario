@@ -91,7 +91,11 @@ public class LevelEditor extends Scene
         DebugDraw.AddCircle2D(new Vector2f(32*20, 32*10), 64, new Vector3f(1,0,0));
 
         for (GameObject gameObject: this.gameObjects) gameObject.Update(dt);
+    }
 
+    @Override
+    public void Render()
+    {
         this.renderer.Render();
     }
 

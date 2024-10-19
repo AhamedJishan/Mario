@@ -117,6 +117,22 @@ public class MouseListener
             return false;
     }
 
+    public static float GetScreenX()
+    {
+        float currentX = GetX() - Get().gameViewportPos.x;
+        currentX = (currentX / Get().gameViewportSize.x) * 1920.0f;
+
+        return currentX;
+    }
+
+    public static float GetScreenY()
+    {
+        float currentY = GetY() - Get().gameViewportPos.y;
+        currentY = 1080.0f - ((currentY / Get().gameViewportSize.y) * 1080.0f);
+
+        return currentY;
+    }
+
     public static float GetOrthoX()
     {
         float currentX = GetX() - Get().gameViewportPos.x;

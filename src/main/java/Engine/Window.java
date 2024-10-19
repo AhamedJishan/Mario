@@ -2,12 +2,16 @@ package Engine;
 
 import Renderer.DebugDraw;
 import Renderer.Framebuffer;
+import Renderer.PickingTexture;
+import Renderer.Renderer;
+import Renderer.Shader;
 import Scenes.LevelEditor;
 import Scenes.LevelScene;
 import Scenes.Scene;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
+import util.AssetPool;
 
 import java.awt.event.KeyEvent;
 
@@ -24,6 +28,8 @@ public class Window
 
     private ImGuiLayer guiLayer;
     private Framebuffer framebuffer;
+    private PickingTexture pickingTexture;
+
 
     private static Window window = null;
     private static Scene currentScene = null;
@@ -140,6 +146,7 @@ public class Window
         this.guiLayer.InitImGUI(glfwWindow);
 
         this.framebuffer = new Framebuffer(1920, 1080);
+        this.pickingTexture = new PickingTexture(1920, 1080);
         glViewport(0, 0, 1920, 1080);
 
         Window.ChangeScene(0);
@@ -151,25 +158,51 @@ public class Window
         float endTime;
         float dt = -1.0f;
 
+        Shader defaultShader = AssetPool.GetShader("assets/shaders/default.glsl");
+        Shader pickingShader = AssetPool.GetShader("assets/shaders/pickingShader.glsl");
+
         while(!glfwWindowShouldClose(glfwWindow))
         {
             // Poll events
             glfwPollEvents();
 
+            // RENDER PASS 1: Render to picking texture
+            this.pickingTexture.EnableWriting();
+            glDisable(GL_BLEND);
+
+            glViewport(0, 0, 1920, 1080);
+            glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            Renderer.BindShader(pickingShader);
+            currentScene.Render();
+
+            if (MouseListener.MouseButtonDown(GLFW_MOUSE_BUTTON_LEFT))
+            {
+                int x = (int)MouseListener.GetScreenX();
+                int y = (int)MouseListener.GetScreenY();
+                System.out.println(pickingTexture.ReadPixel(x, y));
+            }
+
+            glEnable(GL_BLEND);
+            this.pickingTexture.DisableWriting();
+
+            // RENDER PASS 2: Render Actual game
             DebugDraw.BeginFrame();
 
-            framebuffer.Bind();
-
+            this.framebuffer.Bind();
             glClearColor(1, 1, 1, 1);
             glClear(GL_COLOR_BUFFER_BIT);
 
             // Updating the scene
             if (dt >= 0)
             {
+                Renderer.BindShader(defaultShader);
                 DebugDraw.Draw();
                 currentScene.Update(dt);
+                currentScene.Render();
             }
-            framebuffer.Unbind();
+            this.framebuffer.Unbind();
 
             // Testing Scene change
             if (KeyListener.IsKeyPressed(KeyEvent.VK_1))

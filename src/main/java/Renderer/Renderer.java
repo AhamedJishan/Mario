@@ -11,6 +11,7 @@ public class Renderer
 {
     private final int MAX_BATCH_SIZE = 1000;
     private List<RenderBatch> batches;
+    private static Shader currentShader;
 
     public Renderer()
     {
@@ -51,9 +52,21 @@ public class Renderer
         }
     }
 
+    public static void BindShader(Shader shader)
+    {
+        currentShader = shader;
+    }
+
+    public static Shader GetBoundShader()
+    {
+        return currentShader;
+    }
+
     public void Render()
     {
+        currentShader.Use();
         for (RenderBatch batch : batches)
             batch.Render();
+        currentShader.Detach();
     }
 }
