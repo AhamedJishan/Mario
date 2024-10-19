@@ -11,15 +11,15 @@ public class Framebuffer
     {
         // Generate framebuffer
         fboID = glGenFramebuffers();
-        glBindFramebuffer(GL_FRAMEBUFFER,fboID);
+        glBindFramebuffer(GL_FRAMEBUFFER, fboID);
 
         // create and attach the texture to render the data to
         texture = new Texture(width, height);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this.fboID, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this.texture.GetID(), 0);
 
         // create renderbufferobject to store depth info
         int rboID = glGenRenderbuffers();
-        glBindFramebuffer(GL_RENDERBUFFER, rboID);
+        glBindRenderbuffer(GL_RENDERBUFFER, rboID);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, width, height);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboID);
 

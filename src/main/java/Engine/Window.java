@@ -140,6 +140,7 @@ public class Window
         this.guiLayer.InitImGUI(glfwWindow);
 
         this.framebuffer = new Framebuffer(1920, 1080);
+        glViewport(0, 0, 1920, 1080);
 
         Window.ChangeScene(0);
     }
@@ -157,11 +158,12 @@ public class Window
 
             DebugDraw.BeginFrame();
 
+            framebuffer.Bind();
+
             glClearColor(1, 1, 1, 1);
             glClear(GL_COLOR_BUFFER_BIT);
 
             // Updating the scene
-            //framebuffer.Bind();
             if (dt >= 0)
             {
                 DebugDraw.Draw();
@@ -206,5 +208,15 @@ public class Window
     public static void SetHeight(int newHeight)
     {
         Get().height = newHeight;
+    }
+
+    public static Framebuffer GetFramebuffer()
+    {
+        return Get().framebuffer;
+    }
+
+    public static float GetTargetAspectRatio()
+    {
+        return 16.0f / 9.0f;
     }
 }

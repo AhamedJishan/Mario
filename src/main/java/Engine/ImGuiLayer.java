@@ -1,5 +1,6 @@
 package Engine;
 
+import Editor.GameViewWindow;
 import Scenes.Scene;
 import imgui.ImGui;
 import imgui.ImGuiIO;
@@ -49,6 +50,7 @@ public class ImGuiLayer
         SetupDockSpace();
         currentScene.SceneGUI();
         ImGui.showDemoWindow();
+        GameViewWindow.GUI();
         ImGui.end();
 
         EndFrame();
