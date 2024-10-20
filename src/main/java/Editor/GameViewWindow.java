@@ -9,7 +9,7 @@ import org.joml.Vector2f;
 
 public class GameViewWindow
 {
-    public static void GUI()
+    public void GUI()
     {
         ImGui.begin("Game Viewport", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
 
@@ -32,7 +32,7 @@ public class GameViewWindow
         ImGui.end();
     }
 
-    private static ImVec2 GetLargestSizeforViewport()
+    private ImVec2 GetLargestSizeforViewport()
     {
         ImVec2 windowSize = new ImVec2();
         ImGui.getContentRegionAvail(windowSize);
@@ -50,7 +50,7 @@ public class GameViewWindow
         return new ImVec2(aspectWidth, aspectHeight);
     }
 
-    private static ImVec2 GetCenteredPositionForWindow(ImVec2 aspectSize)
+    private ImVec2 GetCenteredPositionForWindow(ImVec2 aspectSize)
     {
         ImVec2 windowSize = new ImVec2();
         ImGui.getContentRegionAvail(windowSize);

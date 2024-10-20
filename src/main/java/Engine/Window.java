@@ -142,12 +142,11 @@ public class Window
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // Initialising ImGui Layer
-        this.guiLayer = new ImGuiLayer();
-        this.guiLayer.InitImGUI(glfwWindow);
-
         this.framebuffer = new Framebuffer(1920, 1080);
         this.pickingTexture = new PickingTexture(1920, 1080);
         glViewport(0, 0, 1920, 1080);
+        this.guiLayer = new ImGuiLayer(pickingTexture);
+        this.guiLayer.InitImGUI(glfwWindow);
 
         Window.ChangeScene(0);
     }
@@ -176,13 +175,6 @@ public class Window
 
             Renderer.BindShader(pickingShader);
             currentScene.Render();
-
-            if (MouseListener.MouseButtonDown(GLFW_MOUSE_BUTTON_LEFT))
-            {
-                int x = (int)MouseListener.GetScreenX();
-                int y = (int)MouseListener.GetScreenY();
-                System.out.println(pickingTexture.ReadPixel(x, y));
-            }
 
             glEnable(GL_BLEND);
             this.pickingTexture.DisableWriting();

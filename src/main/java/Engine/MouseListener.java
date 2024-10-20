@@ -3,7 +3,6 @@ package Engine;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
-import org.lwjgl.glfw.GLFWErrorCallback;
 
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
@@ -117,7 +116,7 @@ public class MouseListener
             return false;
     }
 
-    public static float GetScreenX()
+    public static float GetViewportX()
     {
         float currentX = GetX() - Get().gameViewportPos.x;
         currentX = (currentX / Get().gameViewportSize.x) * 1920.0f;
@@ -125,7 +124,7 @@ public class MouseListener
         return currentX;
     }
 
-    public static float GetScreenY()
+    public static float GetViewportY()
     {
         float currentY = GetY() - Get().gameViewportPos.y;
         currentY = 1080.0f - ((currentY / Get().gameViewportSize.y) * 1080.0f);

@@ -1,6 +1,8 @@
 package Engine;
 
 import Editor.GameViewWindow;
+import Editor.PropertiesWIndow;
+import Renderer.PickingTexture;
 import Scenes.Scene;
 import imgui.ImGui;
 import imgui.ImGuiIO;
@@ -21,6 +23,15 @@ public class ImGuiLayer
     private final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
 
     private String glslVersion = "#version 330";
+
+    private GameViewWindow gameViewWindow;
+    private PropertiesWIndow propertiesWIndow;
+
+    public ImGuiLayer(PickingTexture pickingTexture)
+    {
+        gameViewWindow = new GameViewWindow();
+        propertiesWIndow = new PropertiesWIndow(pickingTexture);
+    }
 
     public void InitImGUI(long windowPtr)
     {
@@ -48,9 +59,11 @@ public class ImGuiLayer
         BeginFrame();
 
         SetupDockSpace();
-        currentScene.SceneGUI();
+        currentScene.GUI();
         ImGui.showDemoWindow();
-        GameViewWindow.GUI();
+        gameViewWindow.GUI();
+        propertiesWIndow.Update(dt, currentScene);
+        propertiesWIndow.GUI();
         ImGui.end();
 
         EndFrame();

@@ -34,12 +34,6 @@ public class LevelEditor extends Scene
         LoadResources();
         this.camera = new Camera(new Vector2f());
         sprites = AssetPool.GetSpriteSheet("assets/textures/spritesheets/decorationsAndBlocks.png");
-        if (levelLoaded)
-        {
-            if (this.gameObjects.size() > 0)
-                this.activeGameObject = gameObjects.get(0);
-            return;
-        }
 
 //        obj1 = new GameObject("Obj1",
 //                new Transform(new Vector2f(200, 100), new Vector2f(256, 256)), 1);
