@@ -206,6 +206,7 @@ public class Window
             this.guiLayer.Update(dt, currentScene);
 
             glfwSwapBuffers(glfwWindow);
+            MouseListener.EndFrame();
 
             // deltaTime calculation
             endTime = (float) glfwGetTime();

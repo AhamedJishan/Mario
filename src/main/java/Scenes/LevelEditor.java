@@ -28,11 +28,12 @@ public class LevelEditor extends Scene
     @Override
     public void Init()
     {
+        this.camera = new Camera(new Vector2f());
         levelManager.AddComponent(new MouseControls());
         levelManager.AddComponent(new GridLines());
+        levelManager.AddComponent(new EditorCamera(this.camera));
 
         LoadResources();
-        this.camera = new Camera(new Vector2f());
         sprites = AssetPool.GetSpriteSheet("assets/textures/spritesheets/decorationsAndBlocks.png");
 
 //        obj1 = new GameObject("Obj1",
@@ -79,6 +80,7 @@ public class LevelEditor extends Scene
     @Override
     public void Update(float dt)
     {
+        camera.AdjustProjection();
         levelManager.Update(dt);
         t += 50 * dt;
         DebugDraw.AddBox2D(new Vector2f(32*15, 32*10), new Vector2f(64, 32), t);
