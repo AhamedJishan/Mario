@@ -28,13 +28,17 @@ public class LevelEditor extends Scene
     @Override
     public void Init()
     {
+        LoadResources();
+        sprites = AssetPool.GetSpriteSheet("assets/textures/spritesheets/decorationsAndBlocks.png");
+        SpriteSheet gizmos = AssetPool.GetSpriteSheet("assets/textures/gizmos.png");
+
         this.camera = new Camera(new Vector2f());
         levelManager.AddComponent(new MouseControls());
         levelManager.AddComponent(new GridLines());
         levelManager.AddComponent(new EditorCamera(this.camera));
+        levelManager.AddComponent(new TranslateGizmo(gizmos.GetSprite(1), Window.GetImGuiLayer().GetPropertiesWindow()));
 
-        LoadResources();
-        sprites = AssetPool.GetSpriteSheet("assets/textures/spritesheets/decorationsAndBlocks.png");
+        levelManager.Start();
 
 //        obj1 = new GameObject("Obj1",
 //                new Transform(new Vector2f(200, 100), new Vector2f(256, 256)), 1);
@@ -63,6 +67,9 @@ public class LevelEditor extends Scene
         AssetPool.AddSpriteSheet("assets/textures/spritesheets/decorationsAndBlocks.png",
                 new SpriteSheet(AssetPool.GetTexture("assets/textures/spritesheets/decorationsAndBlocks.png"),
                         16, 16, 81, 0));
+        AssetPool.AddSpriteSheet("assets/textures/gizmos.png",
+                new SpriteSheet(AssetPool.GetTexture("assets/textures/gizmos.png"),
+                        24, 48, 2, 0));
 
         for (GameObject gameObject : gameObjects)
         {
@@ -98,6 +105,10 @@ public class LevelEditor extends Scene
     @Override
     public void GUI()
     {
+        ImGui.begin("Level Editor Stuff");
+        levelManager.GUI();
+        ImGui.end();
+
         ImGui.begin("Test Window");
 
         ImVec2 windowPos = new ImVec2();

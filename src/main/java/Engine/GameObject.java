@@ -15,6 +15,8 @@ public class GameObject
     public Transform transform;
     private int zIndex;
 
+    private boolean doSerialization = true;
+
     public GameObject(String name, Transform transform, int zIndex)
     {
         this.name = name;
@@ -99,6 +101,16 @@ public class GameObject
     public List<Component> GetAllComponents()
     {
         return this.components;
+    }
+
+    public void SetNoSerialize()
+    {
+        this.doSerialization = false;
+    }
+
+    public boolean DoSerialization()
+    {
+        return this.doSerialization;
     }
 
 }
