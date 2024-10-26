@@ -11,9 +11,10 @@ public class MouseListener
 {
     private static MouseListener instance;
     private double scrollX, scrollY;
-    private double xPos, yPos, lastX, lastY;
+    private double xPos, yPos, lastX, lastY, worldX, worldY, lastWorldX, lastWorldY;
     private boolean mouseButtonPressed[] = new boolean[3];
     private boolean isDragging;
+    private int mouseButtonsDown = 0;
 
     private Vector2f gameViewportPos = new Vector2f();
     private Vector2f gameViewportSize = new Vector2f();
@@ -41,12 +42,17 @@ public class MouseListener
     // CALLBACKS----------------------------------------------------------------------
     public static void MousePosCallback(long window, double xpos, double ypos)
     {
+        if (Get().mouseButtonsDown > 0)
+            Get().isDragging = true;
+
         Get().lastX = Get().xPos;
         Get().lastY = Get().yPos;
+        Get().lastWorldX = Get().worldX;
+        Get().lastWorldY = Get().worldY;
         Get().xPos = xpos;
         Get().yPos = ypos;
-
-        Get().isDragging = Get().mouseButtonPressed[0] || Get().mouseButtonPressed[1] || Get().mouseButtonPressed[2];
+        CalcOrthoX();
+        CalcOrthoY();
     }
 
     public static void MouseButtonCallback(long window, int button, int action, int mods)
@@ -56,6 +62,7 @@ public class MouseListener
             if (button < Get().mouseButtonPressed.length)
             {
                 Get().mouseButtonPressed[button] = true;
+                Get().mouseButtonsDown++;
             }
         }
         else if (action == GLFW_RELEASE)
@@ -64,6 +71,7 @@ public class MouseListener
             {
                 Get().mouseButtonPressed[button] = false;
                 Get().isDragging = false;
+                Get().mouseButtonsDown--;
             }
         }
     }
@@ -80,6 +88,8 @@ public class MouseListener
         Get().scrollY = 0.0;
         Get().lastX = Get().xPos;
         Get().lastY = Get().yPos;
+        Get().lastWorldX = Get().worldX;
+        Get().lastWorldY = Get().worldY;
     }
 
     // GETTERS-----------------------------------------------------------------------
@@ -99,6 +109,15 @@ public class MouseListener
         return (float)(Get().yPos - Get().lastY);
     }
 
+    public static float GetWorldDx()
+    {
+        return (float)(Get().worldX - Get().lastWorldX);
+    }
+    public static float GetWorldDy()
+    {
+        return (float)(Get().worldY - Get().lastWorldY);
+    }
+
     public static float GetScrollX()
     {
         return (float) Get().scrollX;
@@ -114,6 +133,11 @@ public class MouseListener
             return Get().mouseButtonPressed[button];
         else
             return false;
+    }
+
+    public static boolean IsDragging()
+    {
+        return Get().isDragging;
     }
 
     public static float GetViewportX()
@@ -132,7 +156,7 @@ public class MouseListener
         return currentY;
     }
 
-    public static float GetOrthoX()
+    private static void CalcOrthoX()
     {
         float currentX = GetX() - Get().gameViewportPos.x;
         currentX = (currentX / Get().gameViewportSize.x) * 2.0f - 1.0f;
@@ -143,12 +167,15 @@ public class MouseListener
         camera.GetInverseView().mul(camera.GetInverseProjection(), viewProjectionMat);
         tmp.mul(viewProjectionMat);
 
-        currentX = tmp.x;
-
-        return currentX;
+        Get().worldX = tmp.x;
     }
 
-    public static float GetOrthoY()
+    public static float GetOrthoX()
+    {
+        return (float)Get().worldX;
+    }
+
+    private static void CalcOrthoY()
     {
         float currentY = GetY() - Get().gameViewportPos.y;
         currentY = -((currentY / Get().gameViewportSize.y) * 2.0f - 1.0f);
@@ -159,9 +186,13 @@ public class MouseListener
         camera.GetInverseView().mul(camera.GetInverseProjection(), viewProjectionMat);
         tmp.mul(viewProjectionMat);
 
-        currentY = tmp.y;
+        Get().worldY = tmp.y;
 
-        return currentY;
+    }
+
+    public static float GetOrthoY()
+    {
+        return (float)Get().worldY;
     }
 
     public static void SetgameViewportPos(Vector2f gameViewportPos)

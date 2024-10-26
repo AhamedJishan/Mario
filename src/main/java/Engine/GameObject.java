@@ -69,12 +69,16 @@ public class GameObject
 
     public void Update(float dt)
     {
-        for (Component component : components) component.Update(dt);
+        //for (Component component : components) component.Update(dt);
+        for (int i = 0; i < components.size(); i++)
+            components.get(i).Update(dt);
     }
 
     public void Start()
     {
-        for (Component component : components) component.Start();
+        //for (Component component : components) component.Start();
+        for (int i = 0; i < components.size(); i++)
+            components.get(i).Start();
     }
 
     public void GUI()

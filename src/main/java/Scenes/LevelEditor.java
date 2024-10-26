@@ -5,13 +5,9 @@ import Engine.*;
 import Renderer.DebugDraw;
 import imgui.ImGui;
 import imgui.ImVec2;
-import org.joml.Math;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 import util.AssetPool;
-
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 
 public class LevelEditor extends Scene
 {
@@ -36,7 +32,7 @@ public class LevelEditor extends Scene
         levelManager.AddComponent(new MouseControls());
         levelManager.AddComponent(new GridLines());
         levelManager.AddComponent(new EditorCamera(this.camera));
-        levelManager.AddComponent(new TranslateGizmo(gizmos.GetSprite(1), Window.GetImGuiLayer().GetPropertiesWindow()));
+        levelManager.AddComponent(new GizmoSystem(gizmos));
 
         levelManager.Start();
 
@@ -69,7 +65,7 @@ public class LevelEditor extends Scene
                         16, 16, 81, 0));
         AssetPool.AddSpriteSheet("assets/textures/gizmos.png",
                 new SpriteSheet(AssetPool.GetTexture("assets/textures/gizmos.png"),
-                        24, 48, 2, 0));
+                        24, 48, 3, 0));
 
         for (GameObject gameObject : gameObjects)
         {

@@ -141,7 +141,7 @@ public abstract class Scene
                 }
 
                 if (objs[i].GetUid() > maxGoId)
-                    maxCompId = objs[i].GetUid();
+                    maxGoId = objs[i].GetUid();
             }
 
             maxGoId++;
