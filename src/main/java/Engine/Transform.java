@@ -1,6 +1,7 @@
 package Engine;
 
 import Components.Component;
+import Editor.JImGui;
 import org.joml.Vector2f;
 
 public class Transform extends Component
@@ -30,6 +31,15 @@ public class Transform extends Component
         this.position = position;
         this.scale = scale;
         this.zIndex = 0;
+    }
+
+    @Override
+    public void GUI()
+    {
+        JImGui.DrawVec2Control("Position: ", this.position);
+        JImGui.DrawVec2Control("Scale: ", this.scale, 32.0f);
+        JImGui.DragFloat("Rotation: ", this.rotation);
+        JImGui.DragInt("zIndex: ", this.zIndex);
     }
 
     public Transform Copy()

@@ -12,9 +12,9 @@ import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class Gizmo extends Component
 {
-    private Vector4f xAxisColor = new Vector4f(1, 0.5f, 0.5f, 1);
+    private Vector4f xAxisColor = new Vector4f(1, 0.3f, 0.3f, 1);
     private Vector4f xAxisColorHover = new Vector4f(1, 0, 0, 1);
-    private Vector4f yAxisColor = new Vector4f(0.5f, 1, 0.5f, 1);
+    private Vector4f yAxisColor = new Vector4f(0.3f, 1, 0.3f, 1);
     private Vector4f yAxisColorHover = new Vector4f(0, 1, 0, 1);
 
     private GameObject xAxisObject;
@@ -54,6 +54,9 @@ public class Gizmo extends Component
     {
         xAxisObject.transform.rotation = 90.0f;
         yAxisObject.transform.rotation = 180.0f;
+        // Making sure the gizmo is always drawn above all the gameObjects
+        xAxisObject.transform.zIndex = 100;
+        yAxisObject.transform.zIndex = 100;
         xAxisObject.SetNoSerialize();
         yAxisObject.SetNoSerialize();
     }

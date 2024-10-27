@@ -1,6 +1,7 @@
 package Engine;
 
 import Components.Component;
+import imgui.ImGui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +82,8 @@ public class GameObject
     public void GUI()
     {
         for (Component c : components)
-            c.GUI();
+            if (ImGui.collapsingHeader(c.getClass().getSimpleName()))
+                c.GUI();
     }
 
     public static void Init(int maxID)

@@ -1,5 +1,6 @@
 package Components;
 
+import Editor.JImGui;
 import Engine.Transform;
 import Renderer.Texture;
 import imgui.ImGui;
@@ -48,12 +49,8 @@ public class SpriteRenderer extends Component
     @Override
     public void GUI()
     {
-        float[] imColor = {color.x, color.y, color.z, color.w};
-        if (ImGui.colorPicker4("Color Picker: ", imColor, ImGuiColorEditFlags.AlphaBar))
-        {
-            this.color.set(imColor[0], imColor[1], imColor[2], imColor[3]);
+        if (JImGui.ColorPicker4("Color Picker: ", this.color))
             this.isDirty = true;
-        }
     }
 
     public Vector4f GetColor()
