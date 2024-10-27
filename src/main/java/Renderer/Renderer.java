@@ -30,7 +30,7 @@ public class Renderer
         boolean added = false;
         for (RenderBatch batch : batches)
         {
-            if (batch.HasRoom() && batch.ZIndex() == sprite.gameObject.ZIndex())
+            if (batch.HasRoom() && batch.ZIndex() == sprite.gameObject.transform.zIndex)
             {
                 Texture tex = sprite.GetTexture();
                 if (tex == null || (batch.HasTexture(tex) || batch.HasTextureRoom() ))
@@ -44,7 +44,7 @@ public class Renderer
 
         if (!added)
         {
-            RenderBatch newBatch = new RenderBatch(MAX_BATCH_SIZE, sprite.gameObject.ZIndex());
+            RenderBatch newBatch = new RenderBatch(MAX_BATCH_SIZE, sprite.gameObject.transform.zIndex);
             newBatch.Start();
             batches.add(newBatch);
             newBatch.AddSprite(sprite);

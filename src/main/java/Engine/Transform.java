@@ -1,12 +1,14 @@
 package Engine;
 
+import Components.Component;
 import org.joml.Vector2f;
 
-public class Transform
+public class Transform extends Component
 {
     public Vector2f position;
     public Vector2f scale;
     public float rotation;
+    public int zIndex;
 
     public Transform()
     {
@@ -27,6 +29,7 @@ public class Transform
     {
         this.position = position;
         this.scale = scale;
+        this.zIndex = 0;
     }
 
     public Transform Copy()
@@ -47,6 +50,9 @@ public class Transform
         if (!(o instanceof Transform)) return false;
 
         Transform t = (Transform)o;
-        return t.position.equals(this.position) && t.scale.equals(this.scale);
+        return t.position.equals(this.position) &&
+                t.scale.equals(this.scale) &&
+                t.rotation == this.rotation &&
+                t.zIndex == this.zIndex;
     }
 }

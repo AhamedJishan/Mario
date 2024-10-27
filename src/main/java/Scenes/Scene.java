@@ -5,6 +5,7 @@ import Components.ComponentDeserializer;
 import Engine.Camera;
 import Engine.GameObject;
 import Engine.GameObjectDeserializer;
+import Engine.Transform;
 import Renderer.Renderer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -43,6 +44,14 @@ public abstract class Scene
             this.renderer.Add(gameObject);
         }
         isRunning = true;
+    }
+
+    public GameObject CreateGameObject(String name)
+    {
+        GameObject gameObject = new GameObject(name);
+        gameObject.AddComponent(new Transform());
+        gameObject.transform = gameObject.GetComponent(Transform.class);
+        return gameObject;
     }
 
     public void AddGameObjectToScene(GameObject gameObject)
