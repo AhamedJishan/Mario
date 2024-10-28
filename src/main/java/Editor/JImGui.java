@@ -6,6 +6,7 @@ import imgui.flag.ImGuiColorEditFlags;
 import imgui.flag.ImGuiStyleVar;
 import imgui.type.ImFloat;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 public class JImGui
@@ -64,6 +65,79 @@ public class JImGui
 
         values.x = vecValueX[0];
         values.y = vecValueY[0];
+
+        ImGui.nextColumn();
+
+        ImGui.popStyleVar();
+        ImGui.columns(1);
+        ImGui.popID();
+    }
+
+    public static void DrawVec3Control(String label, Vector3f values)
+    {
+        DrawVec3Control(label, values, 0.0f, defaultColumnWidth);
+    }
+
+    public static void DrawVec3Control(String label, Vector3f values, float resetValue)
+    {
+        DrawVec3Control(label, values, resetValue, defaultColumnWidth);
+    }
+
+    public static void DrawVec3Control(String label, Vector3f values, float resetValue, float columnWidth)
+    {
+        ImGui.pushID(label);
+
+        ImGui.columns(2);
+        ImGui.setColumnWidth(0, columnWidth);
+        ImGui.text(label);
+        ImGui.nextColumn();
+
+        ImGui.pushStyleVar(ImGuiStyleVar.ItemSpacing, 0, 0);
+
+        float lineHeight = ImGui.getFontSize() + ImGui.getStyle().getFramePaddingY() * 2.0f;
+        Vector2f buttonSize = new Vector2f(lineHeight + 3.0f, lineHeight);
+        float widthEach = (ImGui.getColumnWidth() - buttonSize.x * 3.0f - 10.0f) / 3.0f;
+
+        ImGui.pushItemWidth(widthEach);
+        ImGui.pushStyleColor(ImGuiCol.Button, 0.8f, 0.1f, 0.15f, 1.0f);
+        ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0.9f, 0.2f, 0.25f, 1.0f);
+        ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0.8f, 0.1f, 0.15f, 1.0f);
+        if (ImGui.button("X", buttonSize.x, buttonSize.y))
+            values.x = resetValue;
+        ImGui.sameLine();
+        float[] vecValueX = {values.x};
+        ImGui.dragFloat("##x", vecValueX, 0.10f);
+        ImGui.popStyleColor(3);
+        ImGui.popItemWidth();
+        ImGui.sameLine();
+
+        ImGui.pushItemWidth(widthEach);
+        ImGui.pushStyleColor(ImGuiCol.Button, 0.2f, 0.7f, 0.2f, 1.0f);
+        ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0.3f, 0.8f, 0.3f, 1.0f);
+        ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0.2f, 0.7f, 0.2f, 1.0f);
+        if (ImGui.button("Y", buttonSize.x, buttonSize.y))
+            values.y = resetValue;
+        ImGui.sameLine();
+        float[] vecValueY = {values.y};
+        ImGui.dragFloat("##y", vecValueY, 0.1f);
+        ImGui.popStyleColor(3);
+        ImGui.popItemWidth();
+
+        ImGui.pushItemWidth(widthEach);
+        ImGui.pushStyleColor(ImGuiCol.Button, 0.2f, 0.2f, 0.7f, 1.0f);
+        ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0.3f, 0.3f, 0.8f, 1.0f);
+        ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0.2f, 0.2f, 0.7f, 1.0f);
+        if (ImGui.button("Z", buttonSize.x, buttonSize.y))
+            values.z = resetValue;
+        ImGui.sameLine();
+        float[] vecValueZ = {values.z};
+        ImGui.dragFloat("##z", vecValueZ, 0.1f);
+        ImGui.popStyleColor(3);
+        ImGui.popItemWidth();
+
+        values.x = vecValueX[0];
+        values.y = vecValueY[0];
+        values.z = vecValueZ[0];
 
         ImGui.nextColumn();
 
