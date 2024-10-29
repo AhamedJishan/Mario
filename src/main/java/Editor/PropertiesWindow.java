@@ -3,6 +3,9 @@ package Editor;
 import Components.NonPickable;
 import Engine.GameObject;
 import Engine.MouseListener;
+import Physics2D.Components.Box2DCollider;
+import Physics2D.Components.Circle2DCollider;
+import Physics2D.Components.Rigidbody2D;
 import Renderer.PickingTexture;
 import Scenes.Scene;
 import imgui.ImGui;
@@ -47,6 +50,28 @@ public class PropertiesWindow
         if (activeGameObject != null)
         {
             ImGui.begin("Properties");
+
+            if (ImGui.beginPopupContextWindow("Add Component"))
+            {
+                if (ImGui.menuItem("Add Rigidbody2D"))
+                {
+                    if (activeGameObject.GetComponent(Rigidbody2D.class) == null)
+                        activeGameObject.AddComponent(new Rigidbody2D());
+                }
+                if (ImGui.menuItem("Add Box Collider2D"))
+                {
+                    if (activeGameObject.GetComponent(Box2DCollider.class) == null && activeGameObject.GetComponent(Circle2DCollider.class) == null)
+                        activeGameObject.AddComponent(new Box2DCollider());
+                }
+                if (ImGui.menuItem("Add Circle Collider"))
+                {
+                    if (activeGameObject.GetComponent(Box2DCollider.class) == null && activeGameObject.GetComponent(Circle2DCollider.class) == null)
+                        activeGameObject.AddComponent(new Circle2DCollider());
+                }
+
+                ImGui.endPopup();
+            }
+
             activeGameObject.GUI();
             ImGui.end();
         }
