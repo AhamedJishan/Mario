@@ -2,59 +2,38 @@ package Scenes;
 
 import Components.*;
 import Engine.*;
-import Renderer.DebugDraw;
 import imgui.ImGui;
 import imgui.ImVec2;
 import org.joml.Vector2f;
-import org.joml.Vector3f;
 import util.AssetPool;
 
-public class LevelEditor extends Scene
+public class LevelEditorSceneInitializer extends SceneInitializer
 {
-    private GameObject obj1;
-    private GameObject obj2;
     private SpriteSheet sprites;
 
-    GameObject levelManager = new GameObject("LevelEditorManager");
+    private GameObject levelManager;
 
-    public LevelEditor()
+    public LevelEditorSceneInitializer()
     {
     }
 
     @Override
-    public void Init()
+    public void Init(Scene scene)
     {
-        LoadResources();
         sprites = AssetPool.GetSpriteSheet("assets/textures/spritesheets/decorationsAndBlocks.png");
         SpriteSheet gizmos = AssetPool.GetSpriteSheet("assets/textures/gizmos.png");
 
-        this.camera = new Camera(new Vector2f());
+        levelManager  = new GameObject("LevelEditorManager");
+        levelManager.SetNoSerialize();
         levelManager.AddComponent(new MouseControls());
         levelManager.AddComponent(new GridLines());
-        levelManager.AddComponent(new EditorCamera(this.camera));
+        levelManager.AddComponent(new EditorCamera(scene.GetCamera()));
         levelManager.AddComponent(new GizmoSystem(gizmos));
-
-        levelManager.Start();
-
-//        obj1 = new GameObject("Obj1",
-//                new Transform(new Vector2f(200, 100), new Vector2f(256, 256)), 1);
-//        SpriteRenderer obj1SpriteRenderer = new SpriteRenderer();
-//        obj1SpriteRenderer.SetColor(new Vector4f(0.3f, 0.3f, 0.6f, 0.7f));
-//        obj1.AddComponent(obj1SpriteRenderer);
-//        obj1.AddComponent(new Rigidbody());
-//        this.AddGameObjectToScene(obj1);
-//
-//        obj2 = new GameObject("Obj2",
-//                new Transform(new Vector2f(400, 100), new Vector2f(256, 256)), 0);
-//        SpriteRenderer obj2SpriteRenderer = new SpriteRenderer();
-//        Sprite obj2Sprite = new Sprite();
-//        obj2Sprite.SetTexture(AssetPool.GetTexture("assets/textures/blendimage2.png"));
-//        obj2SpriteRenderer.SetSprite(obj2Sprite);
-//        obj2.AddComponent(obj2SpriteRenderer);
-//        this.AddGameObjectToScene(obj2);
+        scene.AddGameObjectToScene(levelManager);
     }
 
-    private void LoadResources()
+    @Override
+    public void LoadResources(Scene scene)
     {
         AssetPool.GetShader("assets/shaders/default.glsl");
 
@@ -67,7 +46,7 @@ public class LevelEditor extends Scene
                 new SpriteSheet(AssetPool.GetTexture("assets/textures/gizmos.png"),
                         24, 48, 3, 0));
 
-        for (GameObject gameObject : gameObjects)
+        for (GameObject gameObject : scene.GetGameObjects())
         {
             SpriteRenderer spriteRenderer = gameObject.GetComponent(SpriteRenderer.class);
             if (spriteRenderer != null)
@@ -76,26 +55,6 @@ public class LevelEditor extends Scene
                     spriteRenderer.SetTexture(AssetPool.GetTexture(spriteRenderer.GetTexture().GetFilepath()));
             }
         }
-    }
-
-
-    float t = 0.0f;
-    @Override
-    public void Update(float dt)
-    {
-        camera.AdjustProjection();
-        levelManager.Update(dt);
-        t += 50 * dt;
-        DebugDraw.AddBox2D(new Vector2f(32*15, 32*10), new Vector2f(64, 32), t);
-        DebugDraw.AddCircle2D(new Vector2f(32*20, 32*10), 64, new Vector3f(1,0,0));
-
-        for (GameObject gameObject: this.gameObjects) gameObject.Update(dt);
-    }
-
-    @Override
-    public void Render()
-    {
-        this.renderer.Render();
     }
 
     @Override

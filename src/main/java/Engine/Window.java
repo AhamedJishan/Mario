@@ -1,26 +1,28 @@
 package Engine;
 
+import Observers.EventSystem;
+import Observers.Events.Event;
+import Observers.Events.EventType;
+import Observers.Observer;
 import Renderer.DebugDraw;
 import Renderer.Framebuffer;
 import Renderer.PickingTexture;
 import Renderer.Renderer;
 import Renderer.Shader;
-import Scenes.LevelEditor;
-import Scenes.LevelScene;
+import Scenes.LevelEditorSceneInitializer;
 import Scenes.Scene;
+import Scenes.SceneInitializer;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import util.AssetPool;
-
-import java.awt.event.KeyEvent;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-public class Window
+public class Window implements Observer
 {
     private int width, height;
     private String title;
@@ -29,6 +31,7 @@ public class Window
     private ImGuiLayer guiLayer;
     private Framebuffer framebuffer;
     private PickingTexture pickingTexture;
+    private boolean runtimePlaying = false;
 
 
     private static Window window = null;
@@ -39,22 +42,19 @@ public class Window
         this.width = 1920;
         this.height = 1080;
         this.title = "Mario";
+
+        EventSystem.AddObserver(this);
     }
 
-    public static void ChangeScene(int newScene)
+    public static void ChangeScene(SceneInitializer sceneInitializer)
     {
-        switch (newScene)
+        if (currentScene != null)
         {
-            case 0:
-                currentScene = new LevelEditor();
-                break;
-            case 1:
-                currentScene = new LevelScene();
-                break;
-            default:
-                assert false: "Unknown scene '" + newScene + "'";
-                break;
+            currentScene.Destroy();
         }
+
+        GetImGuiLayer().GetPropertiesWindow().SetActiveGameObject(null);
+        currentScene = new Scene(sceneInitializer);
         currentScene.Load();
         currentScene.Init();
         currentScene.Start();
@@ -148,7 +148,7 @@ public class Window
         this.guiLayer = new ImGuiLayer(pickingTexture);
         this.guiLayer.InitImGUI(glfwWindow);
 
-        Window.ChangeScene(0);
+        Window.ChangeScene(new LevelEditorSceneInitializer());
     }
 
     private void Loop()
@@ -191,16 +191,13 @@ public class Window
             {
                 Renderer.BindShader(defaultShader);
                 DebugDraw.Draw();
-                currentScene.Update(dt);
+                if (runtimePlaying)
+                    currentScene.Update(dt);
+                else
+                    currentScene.EditorUpdate(dt);
                 currentScene.Render();
             }
             this.framebuffer.Unbind();
-
-            // Testing Scene change
-            if (KeyListener.IsKeyPressed(KeyEvent.VK_1))
-                Window.ChangeScene(0);
-            if (KeyListener.IsKeyPressed(KeyEvent.VK_2))
-                Window.ChangeScene(1);
 
             // Update GUI
             this.guiLayer.Update(dt, currentScene);
@@ -213,7 +210,7 @@ public class Window
             dt = endTime - beginTime;
             beginTime = endTime;
         }
-        currentScene.SaveExit();
+        currentScene.Save();
     }
 
     public static int GetWidth()
@@ -249,5 +246,32 @@ public class Window
     public static ImGuiLayer GetImGuiLayer()
     {
         return Get().guiLayer;
+    }
+
+    @Override
+    public void OnNotify(GameObject gameObject, Event event) {
+        switch (event.type)
+        {
+            case EventType.GameEngineStartPlay:
+                runtimePlaying = true;
+                currentScene.Save();
+                Window.ChangeScene(new LevelEditorSceneInitializer());
+                break;
+            case EventType.GameEngineStopPlay:
+                runtimePlaying = false;
+                Window.ChangeScene(new LevelEditorSceneInitializer());
+                break;
+            case EventType.LoadLevel:
+                Window.ChangeScene(new LevelEditorSceneInitializer());
+                break;
+            case EventType.SaveLevel:
+                currentScene.Save();
+                break;
+        }
+
+        if (event.type == EventType.GameEngineStartPlay)
+            System.out.println("Starting!!!");
+        else if (event.type == EventType.GameEngineStopPlay)
+            System.out.println("stopping");
     }
 }

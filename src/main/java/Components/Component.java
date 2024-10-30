@@ -27,6 +27,11 @@ public abstract class Component
 
     }
 
+    public void EditorUpdate(float dt)
+    {
+
+    }
+
     public void GUI()
     {
         try
@@ -100,6 +105,11 @@ public abstract class Component
     public int GetUid()
     {
         return this.uid;
+    }
+
+    public void Destroy()
+    {
+
     }
 
     public static void Init(int maxId)

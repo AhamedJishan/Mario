@@ -6,10 +6,11 @@ import Engine.Camera;
 import Engine.GameObject;
 import Engine.GameObjectDeserializer;
 import Engine.Transform;
+import Physics2D.Physics2D;
 import Renderer.Renderer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import imgui.ImGui;
+import org.joml.Vector2f;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,29 +20,47 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class Scene
+public class Scene
 {
-    protected Renderer renderer = new Renderer();
-    protected Camera camera;
-    private boolean isRunning = false;
-    protected List<GameObject> gameObjects = new ArrayList<>();
-    protected boolean levelLoaded = false;
+    private Renderer renderer = new Renderer();
+    private Camera camera;
+    private boolean isRunning;
+    private List<GameObject> gameObjects;
 
-    public Scene()
+    private SceneInitializer sceneInitializer;
+    private Physics2D physics2D;
+
+    public Scene(SceneInitializer sceneInitializer)
     {
+        this.sceneInitializer = sceneInitializer;
+        physics2D = new Physics2D();
+        renderer = new Renderer();
+        gameObjects = new ArrayList<>();
+        isRunning = false;
+    }
 
+    public void Destroy()
+    {
+        for (int i = 0; i < gameObjects.size(); i++)
+        {
+            gameObjects.get(i).Destroy();
+        }
     }
 
     public void Init()
     {
+        this.camera = new Camera(new Vector2f());
+        sceneInitializer.LoadResources(this);
+        sceneInitializer.Init(this);
     }
 
     public void Start()
     {
-        for (GameObject gameObject : gameObjects)
+        for (int i = 0; i < gameObjects.size(); i++)
         {
-            gameObject.Start();
-            this.renderer.Add(gameObject);
+            gameObjects.get(i).Start();
+            this.renderer.Add(gameObjects.get(i));
+            physics2D.Add(gameObjects.get(i));
         }
         isRunning = true;
     }
@@ -65,7 +84,13 @@ public abstract class Scene
             gameObjects.add(gameObject);
             gameObject.Start();
             this.renderer.Add(gameObject);
+            physics2D.Add(gameObject);
         }
+    }
+
+    public List<GameObject> GetGameObjects()
+    {
+        return this.gameObjects;
     }
 
     public GameObject GetGameObject(int gameObjectId)
@@ -76,8 +101,48 @@ public abstract class Scene
         return result.orElse(null);
     }
 
-    public abstract void Update(float dt);
-    public abstract void Render();
+    public void EditorUpdate(float dt)
+    {
+        camera.AdjustProjection();
+
+        for (int i = 0; i < gameObjects.size(); i++)
+        {
+            GameObject gameObject = gameObjects.get(i);
+            gameObject.EditorUpdate(dt);
+
+            if (gameObject.IsDead())
+            {
+                gameObjects.remove(gameObject);
+                renderer.DestroyGameObject(gameObject);
+                physics2D.DestroyGameObject(gameObject);
+                i--;
+            }
+        }
+    }
+
+    public void Update(float dt)
+    {
+        camera.AdjustProjection();
+        physics2D.Update(dt);
+
+        for (int i = 0; i < gameObjects.size(); i++)
+        {
+            GameObject gameObject = gameObjects.get(i);
+            gameObject.Update(dt);
+
+            if (gameObject.IsDead())
+            {
+                gameObjects.remove(gameObject);
+                renderer.DestroyGameObject(gameObject);
+                physics2D.DestroyGameObject(gameObject);
+                i--;
+            }
+        }
+    }
+    public void Render()
+    {
+        this.renderer.Render();
+    }
 
     public Camera GetCamera()
     {
@@ -86,10 +151,10 @@ public abstract class Scene
 
     public void GUI()
     {
-
+        this.sceneInitializer.GUI();
     }
 
-    public void SaveExit()
+    public void Save()
     {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
@@ -157,7 +222,6 @@ public abstract class Scene
             maxCompId++;
             GameObject.Init(maxGoId);
             Component.Init(maxCompId);
-            this.levelLoaded = true;
         }
     }
 }

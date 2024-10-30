@@ -73,6 +73,17 @@ public class Physics2D
         }
     }
 
+    public void DestroyGameObject(GameObject gameObject)
+    {
+        Rigidbody2D rigidbody2D = gameObject.GetComponent(Rigidbody2D.class);
+
+        if (rigidbody2D != null && rigidbody2D.GetRawBody() != null)
+        {
+            world.destroyBody(rigidbody2D.GetRawBody());
+            rigidbody2D.SetRawBody(null);
+        }
+    }
+
     public void Update(float dt)
     {
         physicsTime += dt;

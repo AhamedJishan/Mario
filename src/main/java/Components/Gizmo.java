@@ -64,6 +64,13 @@ public class Gizmo extends Component
     @Override
     public void Update(float dt)
     {
+        if(using)
+            SetInactive();
+    }
+
+    @Override
+    public void EditorUpdate(float dt)
+    {
         if (!using) return;
 
         this.activeGameObject = this.propertiesWindow.GetActiveGameObject();

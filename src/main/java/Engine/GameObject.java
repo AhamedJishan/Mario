@@ -16,6 +16,7 @@ public class GameObject
     public transient Transform transform;
 
     private boolean doSerialization = true;
+    private boolean isDead = false;
 
     public GameObject(String name)
     {
@@ -67,9 +68,14 @@ public class GameObject
 
     public void Update(float dt)
     {
-        //for (Component component : components) component.Update(dt);
         for (int i = 0; i < components.size(); i++)
             components.get(i).Update(dt);
+    }
+
+    public void EditorUpdate(float dt)
+    {
+        for (int i = 0; i < components.size(); i++)
+            components.get(i).EditorUpdate(dt);
     }
 
     public void Start()
@@ -86,6 +92,15 @@ public class GameObject
                 c.GUI();
     }
 
+    public void Destroy()
+    {
+        this.isDead = true;
+        for (int i = 0; i < components.size(); i++)
+        {
+            components.get(i).Destroy();
+        }
+    }
+
     public static void Init(int maxID)
     {
         ID_COUNTER = maxID;
@@ -94,6 +109,11 @@ public class GameObject
     public int GetUid()
     {
         return this.uid;
+    }
+
+    public boolean IsDead()
+    {
+        return this.isDead;
     }
 
     public List<Component> GetAllComponents()

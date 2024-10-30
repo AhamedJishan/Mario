@@ -23,7 +23,7 @@ public class MouseControls extends Component
     }
 
     @Override
-    public void Update(float dt)
+    public void EditorUpdate(float dt)
     {
         if (this.holdingObject != null)
         {

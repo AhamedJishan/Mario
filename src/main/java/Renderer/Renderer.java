@@ -52,6 +52,18 @@ public class Renderer
         }
     }
 
+    public void DestroyGameObject(GameObject gameObject)
+    {
+        if (gameObject.GetComponent(SpriteRenderer.class) == null)
+            return;
+
+        for (RenderBatch renderBatch : batches)
+        {
+            if (renderBatch.DestroyIfExists(gameObject))
+                return;
+        }
+    }
+
     public static void BindShader(Shader shader)
     {
         currentShader = shader;

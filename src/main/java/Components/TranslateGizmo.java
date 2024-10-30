@@ -11,7 +11,7 @@ public class TranslateGizmo extends Gizmo
     }
 
     @Override
-    public void Update(float dt)
+    public void EditorUpdate(float dt)
     {
         if (activeGameObject != null)
         {
@@ -21,6 +21,6 @@ public class TranslateGizmo extends Gizmo
                 activeGameObject.transform.position.y += MouseListener.GetWorldDy();
         }
 
-        super.Update(dt);
+        super.EditorUpdate(dt);
     }
 }

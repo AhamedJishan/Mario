@@ -10,7 +10,7 @@ import util.Settings;
 public class GridLines extends Component
 {
     @Override
-    public void Update(float dt)
+    public void EditorUpdate(float dt)
     {
         Camera camera = Window.GetScene().GetCamera();
 

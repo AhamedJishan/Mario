@@ -2,6 +2,7 @@ package Renderer;
 
 import Components.Sprite;
 import Components.SpriteRenderer;
+import Engine.GameObject;
 import Engine.Window;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
@@ -255,6 +256,26 @@ public class RenderBatch implements Comparable<RenderBatch>
         elements[offsetArrayIndex + 3] = 0 + offset;
         elements[offsetArrayIndex + 4] = 2 + offset;
         elements[offsetArrayIndex + 5] = 1 + offset;
+    }
+
+    public boolean DestroyIfExists(GameObject gameObject)
+    {
+        SpriteRenderer spriteRenderer = gameObject.GetComponent(SpriteRenderer.class);
+
+        for (int i = 0; i < numSprites; i++)
+        {
+            if (sprites[i] == spriteRenderer)
+            {
+                for (int j = i; j < numSprites; j++)
+                {
+                    sprites[j] = sprites[j+1];
+                    sprites[j].SetDirty();
+                }
+                numSprites--;
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean HasRoom()

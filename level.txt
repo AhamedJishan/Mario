@@ -1,20 +1,20 @@
 [
   {
-    "uid": 1,
+    "uid": 0,
     "name": "Sprite_Obj_Gen",
     "components": [
       {
         "type": "Engine.Transform",
         "properties": {
           "position": {
-            "x": 32.0,
-            "y": 169.64626
+            "x": 288.0,
+            "y": 64.0
           },
           "scale": {
             "x": 32.0,
             "y": 32.0
           },
-          "rotation": 44.6,
+          "rotation": 0.0,
           "zIndex": 0,
           "uid": 18
         }
@@ -59,18 +59,19 @@
         }
       }
     ],
-    "doSerialization": true
+    "doSerialization": true,
+    "isDead": false
   },
   {
-    "uid": 2,
+    "uid": 1,
     "name": "Sprite_Obj_Gen",
     "components": [
       {
         "type": "Engine.Transform",
         "properties": {
           "position": {
-            "x": 623.5076,
-            "y": 224.0
+            "x": 320.0,
+            "y": 64.0
           },
           "scale": {
             "x": 32.0,
@@ -100,19 +101,19 @@
             },
             "texCoords": [
               {
-                "x": 0.42857143,
+                "x": 0.14285715,
                 "y": 1.0
               },
               {
-                "x": 0.42857143,
+                "x": 0.14285715,
                 "y": 0.9166667
               },
               {
-                "x": 0.2857143,
+                "x": 0.0,
                 "y": 0.9166667
               },
               {
-                "x": 0.2857143,
+                "x": 0.0,
                 "y": 1.0
               }
             ]
@@ -121,18 +122,19 @@
         }
       }
     ],
-    "doSerialization": true
+    "doSerialization": true,
+    "isDead": false
   },
   {
-    "uid": 3,
+    "uid": 2,
     "name": "Sprite_Obj_Gen",
     "components": [
       {
         "type": "Engine.Transform",
         "properties": {
           "position": {
-            "x": 352.0,
-            "y": 47.261536
+            "x": 288.0,
+            "y": 364.0517
           },
           "scale": {
             "x": 32.0,
@@ -140,7 +142,7 @@
           },
           "rotation": 0.0,
           "zIndex": 0,
-          "uid": 40
+          "uid": 22
         }
       },
       {
@@ -163,23 +165,23 @@
             "texCoords": [
               {
                 "x": 0.14285715,
-                "y": 1.0
+                "y": 0.9166667
               },
               {
                 "x": 0.14285715,
-                "y": 0.9166667
+                "y": 0.8333333
+              },
+              {
+                "x": 0.0,
+                "y": 0.8333333
               },
               {
                 "x": 0.0,
                 "y": 0.9166667
-              },
-              {
-                "x": 0.0,
-                "y": 1.0
               }
             ]
           },
-          "uid": 41
+          "uid": 23
         }
       },
       {
@@ -191,19 +193,19 @@
           },
           "angularDamping": 0.8,
           "linearDamping": 0.9,
-          "mass": 0.0,
+          "mass": 100.0,
           "bodyType": "Dynamic",
           "fixedRotation": false,
           "continousCollision": true,
-          "uid": 60
+          "uid": 24
         }
       },
       {
         "type": "Physics2D.Components.Box2DCollider",
         "properties": {
           "halfSize": {
-            "x": 1.0,
-            "y": 1.0
+            "x": 32.0,
+            "y": 32.0
           },
           "origin": {
             "x": 0.0,
@@ -213,10 +215,11 @@
             "x": 0.0,
             "y": 0.0
           },
-          "uid": 61
+          "uid": 25
         }
       }
     ],
-    "doSerialization": true
+    "doSerialization": true,
+    "isDead": false
   }
 ]

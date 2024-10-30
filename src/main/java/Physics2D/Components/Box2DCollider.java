@@ -1,6 +1,8 @@
 package Physics2D.Components;
 
+import Renderer.DebugDraw;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 public class Box2DCollider extends Collider
 {
@@ -18,5 +20,12 @@ public class Box2DCollider extends Collider
     public Vector2f GetOrigin()
     {
         return origin;
+    }
+
+    @Override
+    public void EditorUpdate(float dt)
+    {
+        Vector2f center = new Vector2f(gameObject.transform.position).add(offset);
+        DebugDraw.AddBox2D(center, halfSize, gameObject.transform.rotation);
     }
 }

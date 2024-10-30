@@ -47,6 +47,17 @@ public class SpriteRenderer extends Component
     }
 
     @Override
+    public void EditorUpdate(float dt)
+    {
+        if (!this.lastTransform.equals(this.gameObject.transform))
+        {
+            this.gameObject.transform.Copy(this.lastTransform);
+            isDirty = true;
+        }
+
+    }
+
+    @Override
     public void GUI()
     {
         if (JImGui.ColorPicker4("Color Picker: ", this.color))
@@ -80,6 +91,11 @@ public class SpriteRenderer extends Component
     public void SetSprite (Sprite sprite)
     {
         this.sprite = sprite;
+        isDirty = true;
+    }
+
+    public void SetDirty()
+    {
         isDirty = true;
     }
 

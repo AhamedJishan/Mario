@@ -27,7 +27,7 @@ public class EditorCamera extends Component
     }
 
     @Override
-    public void Update(float dt)
+    public void EditorUpdate(float dt)
     {
         if (MouseListener.MouseButtonDown(GLFW_MOUSE_BUTTON_MIDDLE) && dragDebounce > 0)
         {

@@ -1,6 +1,7 @@
 package Engine;
 
 import Editor.GameViewWindow;
+import Editor.MenuBar;
 import Editor.PropertiesWindow;
 import Renderer.PickingTexture;
 import Scenes.Scene;
@@ -26,11 +27,13 @@ public class ImGuiLayer
 
     private GameViewWindow gameViewWindow;
     private PropertiesWindow propertiesWindow;
+    private MenuBar menuBar;
 
     public ImGuiLayer(PickingTexture pickingTexture)
     {
         gameViewWindow = new GameViewWindow();
         propertiesWindow = new PropertiesWindow(pickingTexture);
+        menuBar = new MenuBar();
     }
 
     public void InitImGUI(long windowPtr)
@@ -64,6 +67,7 @@ public class ImGuiLayer
         gameViewWindow.GUI();
         propertiesWindow.Update(dt, currentScene);
         propertiesWindow.GUI();
+        menuBar.GUI();
         ImGui.end();
 
         EndFrame();
