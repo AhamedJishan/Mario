@@ -7,6 +7,9 @@ import imgui.ImVec2;
 import org.joml.Vector2f;
 import util.AssetPool;
 
+import static util.Settings.GRID_HEIGHT;
+import static util.Settings.GRID_WIDTH;
+
 public class LevelEditorSceneInitializer extends SceneInitializer
 {
     private SpriteSheet sprites;
@@ -86,7 +89,7 @@ public class LevelEditorSceneInitializer extends SceneInitializer
             // Getting texCoords[0] and [2] as 0 is topRight and 2 bottom left
             if (ImGui.imageButton(id, width, height, texCoords[2].x, texCoords[0].y, texCoords[0].x, texCoords[2].y))
             {
-                GameObject object = Prefabs.GenerateSpriteObject(sprite, 32, 32);
+                GameObject object = Prefabs.GenerateSpriteObject(sprite, GRID_WIDTH, GRID_HEIGHT);
                 // Attach this gameobject to the mouse cursor
                 levelManager.GetComponent(MouseControls.class).PickupObject(object);
             }

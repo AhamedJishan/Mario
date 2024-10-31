@@ -1,14 +1,11 @@
 package Components;
 
 import Editor.PropertiesWindow;
-import Engine.GameObject;
-import Engine.MouseListener;
-import Engine.Prefabs;
-import Engine.Window;
+import Engine.*;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class Gizmo extends Component
 {
@@ -24,11 +21,11 @@ public class Gizmo extends Component
     protected GameObject activeGameObject = null;
     private PropertiesWindow propertiesWindow;
 
-    private Vector2f xAxisOffset = new Vector2f(64, -5);
-    private Vector2f yAxisOffset = new Vector2f(16, 61);
+    private Vector2f xAxisOffset = new Vector2f(24f / 80.0f, -6f / 80.0f);
+    private Vector2f yAxisOffset = new Vector2f(-7f / 80.0f, 21f / 80.0f);
 
-    private int gizmoWidth = 16;
-    private int gizmoHeight = 48;
+    private float gizmoWidth = 16 / 80.0f;
+    private float gizmoHeight = 48 / 80.0f;
 
     protected boolean xAxisActive = false;
     protected boolean yAxisActive = false;
@@ -77,6 +74,23 @@ public class Gizmo extends Component
         if (this.activeGameObject != null)
         {
             this.SetActive();
+
+            // TODO: move this into it's correct place
+            if (KeyListener.IsKeyPressed(GLFW_KEY_LEFT_SHIFT) && KeyListener.KeyBeginPress(GLFW_KEY_D))
+            {
+                GameObject newObj = activeGameObject.Copy();
+                Window.GetScene().AddGameObjectToScene(newObj);
+                newObj.transform.position.add(0.1f, 0.1f);
+                this.propertiesWindow.SetActiveGameObject(newObj);
+                return;
+            }
+            else if (KeyListener.IsKeyPressed(GLFW_KEY_DELETE))
+            {
+                activeGameObject.Destroy();
+                SetInactive();
+                propertiesWindow.SetActiveGameObject(null);
+                return;
+            }
         }
         else
         {
@@ -115,10 +129,10 @@ public class Gizmo extends Component
     private boolean CheckXHoverState()
     {
         Vector2f mousePos = new Vector2f(MouseListener.GetOrthoX(), MouseListener.GetOrthoY());
-        if (mousePos.x <= xAxisObject.transform.position.x &&
-                mousePos.x >= xAxisObject.transform.position.x - gizmoHeight &&
-                mousePos.y >= xAxisObject.transform.position.y &&
-                mousePos.y <= xAxisObject.transform.position.y + gizmoWidth)
+        if (mousePos.x <= xAxisObject.transform.position.x + (gizmoHeight/2.0f)&&
+                mousePos.x >= xAxisObject.transform.position.x - (gizmoHeight/2.0f) &&
+                mousePos.y >= xAxisObject.transform.position.y - (gizmoWidth/2.0f) &&
+                mousePos.y <= xAxisObject.transform.position.y + (gizmoWidth/2.0f))
         {
             xAxisSprite.SetColor(xAxisColorHover);
             return true;
@@ -131,10 +145,10 @@ public class Gizmo extends Component
     private boolean CheckYHoverState()
     {
         Vector2f mousePos = new Vector2f(MouseListener.GetOrthoX(), MouseListener.GetOrthoY());
-        if (mousePos.x <= yAxisObject.transform.position.x &&
-                mousePos.x >= yAxisObject.transform.position.x - gizmoWidth &&
-                mousePos.y <= yAxisObject.transform.position.y &&
-                mousePos.y >= yAxisObject.transform.position.y - gizmoHeight)
+        if (mousePos.x <= yAxisObject.transform.position.x + (gizmoWidth/2.0f) &&
+                mousePos.x >= yAxisObject.transform.position.x - (gizmoWidth/2.0f) &&
+                mousePos.y <= yAxisObject.transform.position.y + (gizmoHeight/2.0f)&&
+                mousePos.y >= yAxisObject.transform.position.y - (gizmoHeight/2.0f))
         {
             yAxisSprite.SetColor(yAxisColorHover);
             return true;

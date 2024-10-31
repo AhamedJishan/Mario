@@ -44,7 +44,7 @@ public class Renderer
 
         if (!added)
         {
-            RenderBatch newBatch = new RenderBatch(MAX_BATCH_SIZE, sprite.gameObject.transform.zIndex);
+            RenderBatch newBatch = new RenderBatch(MAX_BATCH_SIZE, sprite.gameObject.transform.zIndex, this);
             newBatch.Start();
             batches.add(newBatch);
             newBatch.AddSprite(sprite);
@@ -77,8 +77,8 @@ public class Renderer
     public void Render()
     {
         currentShader.Use();
-        for (RenderBatch batch : batches)
-            batch.Render();
+        for (int i = 0; i<batches.size(); i++)
+            batches.get(i).Render();
         currentShader.Detach();
     }
 }

@@ -38,8 +38,8 @@ public class Transform extends Component
     {
         JImGui.DrawVec2Control("Position: ", this.position);
         JImGui.DrawVec2Control("Scale: ", this.scale, 32.0f);
-        JImGui.DragFloat("Rotation: ", this.rotation);
-        JImGui.DragInt("zIndex: ", this.zIndex);
+        rotation = JImGui.DragFloat("Rotation: ", this.rotation);
+        zIndex = JImGui.DragInt("zIndex: ", this.zIndex);
     }
 
     public Transform Copy()

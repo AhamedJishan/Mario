@@ -55,8 +55,11 @@ public class RenderBatch implements Comparable<RenderBatch>
     private int maxBatchSize;
     private int zIndex;
 
-    public RenderBatch(int maxBatchSize, int zIndex)
+    private Renderer renderer;
+
+    public RenderBatch(int maxBatchSize, int zIndex, Renderer renderer)
     {
+        this.renderer = renderer;
         this.zIndex = zIndex;
         this.sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
@@ -130,6 +133,14 @@ public class RenderBatch implements Comparable<RenderBatch>
                 spr.SetClean();
                 rebufferData = true;
             }
+
+            // TODO: get better solution for this
+            if (spr.gameObject.transform.zIndex != zIndex)
+            {
+                DestroyIfExists(spr.gameObject);
+                renderer.Add(spr.gameObject);
+                i--;
+            }
         }
 
         if (rebufferData)
@@ -192,13 +203,13 @@ public class RenderBatch implements Comparable<RenderBatch>
         }
 
         // Add vertices with appropriate properties
-        float xAdd = 1.0f;
-        float yAdd = 1.0f;
+        float xAdd = 0.5f;
+        float yAdd = 0.5f;
         for (int i = 0; i < 4; i++)
         {
-            if      (i == 1) yAdd = 0.0f;
-            else if (i == 2) xAdd = 0.0f;
-            else if (i == 3) yAdd = 1.0f;
+            if      (i == 1) yAdd = -0.5f;
+            else if (i == 2) xAdd = -0.5f;
+            else if (i == 3) yAdd = 0.5f;
 
             // Rotate if necessary
             Vector4f currentPos = new Vector4f(sprite.gameObject.transform.position.x + (xAdd * sprite.gameObject.transform.scale.x),
@@ -266,7 +277,7 @@ public class RenderBatch implements Comparable<RenderBatch>
         {
             if (sprites[i] == spriteRenderer)
             {
-                for (int j = i; j < numSprites; j++)
+                for (int j = i; j < numSprites - 1; j++)
                 {
                     sprites[j] = sprites[j+1];
                     sprites[j].SetDirty();

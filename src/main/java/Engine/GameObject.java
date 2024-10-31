@@ -1,7 +1,12 @@
 package Engine;
 
 import Components.Component;
+import Components.ComponentDeserializer;
+import Components.SpriteRenderer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import imgui.ImGui;
+import util.AssetPool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,6 +111,28 @@ public class GameObject
         ID_COUNTER = maxID;
     }
 
+    public GameObject Copy()
+    {
+        // TODO: Come up with a better solution
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Component.class, new ComponentDeserializer())
+                .registerTypeAdapter(GameObject.class, new GameObjectDeserializer())
+                .create();
+        String objAsJson = gson.toJson(this);
+        GameObject obj = gson.fromJson(objAsJson, GameObject.class);
+        obj.GenerateUID();
+        for (Component component: obj.GetAllComponents())
+            component.GenerateID();
+
+        SpriteRenderer spriteRenderer = obj.GetComponent(SpriteRenderer.class);
+        if (spriteRenderer != null && spriteRenderer.GetTexture() != null)
+        {
+            spriteRenderer.SetTexture(AssetPool.GetTexture(spriteRenderer.GetTexture().GetFilepath()));
+        }
+
+        return obj;
+    }
+
     public int GetUid()
     {
         return this.uid;
@@ -119,6 +146,11 @@ public class GameObject
     public List<Component> GetAllComponents()
     {
         return this.components;
+    }
+
+    public void GenerateUID()
+    {
+        this.uid = ID_COUNTER++;
     }
 
     public void SetNoSerialize()
