@@ -56,7 +56,8 @@ public class Physics2D
             }
             else if ((boxCollider = gameObject.GetComponent(Box2DCollider.class)) != null)
             {
-                Vector2f halfSize = new Vector2f(boxCollider.GetHalfSize().mul(0.5f));
+                //Vector2f halfSize = new Vector2f(boxCollider.GetHalfSize()).mul(0.5f);
+                Vector2f halfSize = new Vector2f(boxCollider.GetHalfSize());
                 Vector2f offset = new Vector2f(boxCollider.GetOffset());
                 Vector2f origin = new Vector2f(boxCollider.GetOrigin());
                 shape.setAsBox(halfSize.x, halfSize.y, new Vec2(origin.x, origin.y), 0);
