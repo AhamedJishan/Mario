@@ -36,6 +36,7 @@ public class Transform extends Component
     @Override
     public void GUI()
     {
+        gameObject.name = JImGui.InputText("Name: ", gameObject.name);
         JImGui.DrawVec2Control("Position: ", this.position);
         JImGui.DrawVec2Control("Scale: ", this.scale, 32.0f);
         rotation = JImGui.DragFloat("Rotation: ", this.rotation);

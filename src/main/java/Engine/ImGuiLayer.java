@@ -8,6 +8,7 @@ import Renderer.PickingTexture;
 import Scenes.Scene;
 import imgui.ImGui;
 import imgui.ImGuiIO;
+import imgui.ImGuiViewport;
 import imgui.flag.ImGuiConfigFlags;
 import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
@@ -48,7 +49,8 @@ public class ImGuiLayer
 
         final ImGuiIO io = ImGui.getIO();
         io.setIniFilename("imgui.ini"); // We don't want to save .ini file
-        io.setConfigFlags(ImGuiConfigFlags.DockingEnable);
+        io.addConfigFlags(ImGuiConfigFlags.DockingEnable);
+        //io.addConfigFlags(ImGuiConfigFlags.ViewportsEnable);
 
         io.getFonts().addFontFromFileTTF("assets/fonts/segoeui.ttf", 20);
     }
@@ -91,6 +93,7 @@ public class ImGuiLayer
 
         ImGui.render();
         imGuiGl3.renderDrawData(ImGui.getDrawData());
+
         if (ImGui.getIO().hasConfigFlags(ImGuiConfigFlags.ViewportsEnable)) {
             final long backupCurrentContext = glfwGetCurrentContext();
             ImGui.updatePlatformWindows();
@@ -102,6 +105,12 @@ public class ImGuiLayer
     private void SetupDockSpace()
     {
         int windowFlags = ImGuiWindowFlags.MenuBar | ImGuiWindowFlags.NoDocking;
+
+//        ImGuiViewport mainViewport = ImGui.getMainViewport();
+//        ImGui.setNextWindowPos(mainViewport.getWorkPosX(), mainViewport.getWorkPosY());
+//        ImGui.setNextWindowSize(mainViewport.getWorkSizeX(), mainViewport.getWorkSizeY());
+//        ImGui.setNextWindowViewport(mainViewport.getID());
+
         ImGui.setNextWindowPos(0.0f, 0.0f);
         ImGui.setNextWindowSize(Window.GetWidth(), Window.GetHeight());
         ImGui.pushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);

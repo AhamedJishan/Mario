@@ -1,7 +1,7 @@
 [
   {
     "uid": 0,
-    "name": "Sprite_Obj_Gen",
+    "name": "Birck1",
     "components": [
       {
         "type": "Engine.Transform",
@@ -258,7 +258,7 @@
   },
   {
     "uid": 3,
-    "name": "Sprite_Obj_Gen",
+    "name": "Brick2",
     "components": [
       {
         "type": "Engine.Transform",
@@ -355,7 +355,7 @@
   },
   {
     "uid": 4,
-    "name": "Sprite_Obj_Gen",
+    "name": "Brick2",
     "components": [
       {
         "type": "Engine.Transform",
@@ -549,7 +549,7 @@
   },
   {
     "uid": 6,
-    "name": "Sprite_Obj_Gen",
+    "name": "Brick3",
     "components": [
       {
         "type": "Engine.Transform",
@@ -646,7 +646,7 @@
   },
   {
     "uid": 7,
-    "name": "Sprite_Obj_Gen",
+    "name": "StoneBrick",
     "components": [
       {
         "type": "Engine.Transform",

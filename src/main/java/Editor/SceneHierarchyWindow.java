@@ -9,6 +9,8 @@ import java.util.List;
 
 public class SceneHierarchyWindow
 {
+    private final static String payloadObjectType = "SceneHierarchy";
+
     public void GUI()
     {
         ImGui.begin("Scene Hierarchy");
@@ -20,15 +22,7 @@ public class SceneHierarchyWindow
             if (!gameObject.DoSerialization())
                 continue;
 
-            ImGui.pushID(index);
-            boolean treeNodeOpen = ImGui.treeNodeEx(
-                    gameObject.name,
-                    ImGuiTreeNodeFlags.DefaultOpen |
-                    ImGuiTreeNodeFlags.FramePadding |
-                    ImGuiTreeNodeFlags.OpenOnArrow |
-                    ImGuiTreeNodeFlags.SpanAvailWidth, gameObject.name
-            );
-            ImGui.popID();
+            boolean treeNodeOpen = DoTreeNode(gameObject, index);
 
             if (treeNodeOpen)
                 ImGui.treePop();
@@ -36,5 +30,38 @@ public class SceneHierarchyWindow
         }
 
         ImGui.end();
+    }
+
+    private boolean DoTreeNode(GameObject gameObject, int index)
+    {
+        ImGui.pushID(index);
+        boolean treeNodeOpen = ImGui.treeNodeEx(
+                gameObject.name,
+                ImGuiTreeNodeFlags.DefaultOpen |
+                        ImGuiTreeNodeFlags.FramePadding |
+                        ImGuiTreeNodeFlags.OpenOnArrow |
+                        ImGuiTreeNodeFlags.SpanAvailWidth, gameObject.name
+        );
+        ImGui.popID();
+
+        if (ImGui.beginDragDropSource())
+        {
+            ImGui.setDragDropPayload(payloadObjectType, gameObject);
+            ImGui.text(gameObject.name);
+            ImGui.endDragDropSource();
+        }
+
+        if (ImGui.beginDragDropTarget())
+        {
+            Object payloadObj = ImGui.acceptDragDropPayload(payloadObjectType);
+            if (payloadObj != null && payloadObj.getClass().isAssignableFrom(GameObject.class))
+            {
+                GameObject playerObject = (GameObject)payloadObj;
+                System.out.println("Payload Accepted: " + playerObject.name);
+            }
+            ImGui.endDragDropTarget();
+        }
+
+        return treeNodeOpen;
     }
 }
